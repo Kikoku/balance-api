@@ -2,11 +2,13 @@ import {
   GraphQLObjectType,
   GraphQLSchema,
   GraphQLNonNull,
-  GraphQLID
+  GraphQLID,
+  GraphQLString
 } from 'graphql';
 import {
   connectionFromPromisedArray,
-  connectionArgs
+  connectionArgs,
+  mutationWithClientMutationId
 } from 'graphql-relay';
 import {
   userLoader,
@@ -70,4 +72,50 @@ const queryType = new GraphQLObjectType({
   })
 })
 
-export default new GraphQLSchema({query: queryType})
+const mutationType = new GraphQLObjectType({
+  name: 'Mutation',
+  fields: () => ({
+    newUser: mutationWithClientMutationId({
+      name: 'newUser',
+      inputFields: {
+        first: {
+          type: new GraphQLNonNull(GraphQLString)
+        },
+        middle: {
+          type: GraphQLString
+        },
+        last: {
+          type: new GraphQLNonNull(GraphQLString)
+        },
+        dci: {
+          type: new GraphQLNonNull(GraphQLString)
+        },
+        country: {
+          type: GraphQLString
+        }
+      },
+      outputFields: {
+        user: {
+          type: UserType,
+          resolve: (payload) => User.findByIdAsync(payload.userId)
+        }
+      },
+      mutateAndGetPayload: (args) => {
+        let newUser = new User({
+          middle: "",
+          country: "",
+          ...args
+        });
+        return newUser.saveAsync()
+        .then(user => ({
+            userId:user.id
+        }))
+      }
+    })
+  })
+})
+
+export default new GraphQLSchema({
+  query: queryType,
+  mutation: mutationType
+})
