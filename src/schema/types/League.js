@@ -15,6 +15,9 @@ import Event from '../../../models/types/Event';
 import { OrganizationConnection } from './Organization';
 import OrgToLeague from '../../../models/relationships/OrgToLeague';
 import Organization from '../../../models/types/Organization';
+import { UserConnection } from './User';
+import UserToLeague from '../../../models/relationships/UserToLeague';
+import User from '../../../models/types/User';
 import { nodeInterface  } from '../node';
 
 const LeagueType = new GraphQLObjectType({
@@ -43,6 +46,14 @@ const LeagueType = new GraphQLObjectType({
       args: connectionArgs,
       resolve: (league, args) => connectionFromPromisedArray(
         OrgToLeague.findAsync({leagueId: league.id}).then(doc => Organization.findAsync(doc.orgId)),
+        args
+      )
+    },
+    users: {
+      type: UserConnection,
+      args: connectionArgs,
+      resolve: (league, args) => connectionFromPromisedArray(
+        UserToLeague.findAsync({leagueId: league.id}).then(doc => User.findAsync(doc.userId)),
         args
       )
     }
