@@ -13,7 +13,7 @@ import { EventConnection } from './Event';
 import LeagueToEvent from '../../../models/relationships/LeaugeToEvent';
 import { OrganizationConnection } from './Organization';
 import LeagueToOrg from '../../../models/relationships/LeagueToOrg';
-import { UserConnection } from './User';
+import { ResultLeagueConnection } from './ResultLeague';
 import LeagueToUser from '../../../models/relationships/LeagueToUser';
 import {
   eventLoader,
@@ -52,10 +52,10 @@ const LeagueType = new GraphQLObjectType({
       )
     },
     users: {
-      type: UserConnection,
+      type: ResultLeagueConnection,
       args: connectionArgs,
       resolve: (league, args) => connectionFromPromisedArray(
-        LeagueToUser.findAsync({leagueId: league.id}).map(doc => userLoader.load(doc.userId)),
+        LeagueToUser.findAsync({leagueId: league.id}),
         args
       )
     }
