@@ -11,8 +11,10 @@ import {
 } from 'graphql-relay';
 import { MatchConnection } from './Match.js';
 import MatchToEvent from '../../../models/relationships/MatchToEvent';
+import OrganizationType from '../types/Organization';
 import {
-  matchLoader
+  matchLoader,
+  organizationLoader
 } from '../schemaHelpers';
 import { nodeInterface  } from '../node';
 
@@ -36,6 +38,10 @@ const EventType = new GraphQLObjectType({
       type: MatchConnection,
       args: connectionArgs,
       resolve: (event, args) => connectionFromPromisedArray(MatchToEvent.findAsync({eventId: event.id}).map(doc => matchLoader.load(doc.matchId)))
+    },
+    organization: {
+      type: OrganizationType,
+      resolve: (event, args) => organizationLoader.load(event.id)
     }
   }),
   interfaces: () => [nodeInterface]
