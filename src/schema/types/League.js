@@ -10,11 +10,11 @@ import {
   connectionFromPromisedArray
 } from 'graphql-relay';
 import { EventConnection } from './Event';
-import EventToLeague from '../../../models/relationships/EventToLeauge';
+import LeagueToEvent from '../../../models/relationships/LeaugeToEvent';
 import { OrganizationConnection } from './Organization';
-import OrgToLeague from '../../../models/relationships/OrgToLeague';
+import LeagueToOrg from '../../../models/relationships/LeagueToOrg';
 import { UserConnection } from './User';
-import UserToLeague from '../../../models/relationships/UserToLeague';
+import LeagueToUser from '../../../models/relationships/LeagueToUser';
 import {
   eventLoader,
   organizationLoader,
@@ -39,7 +39,7 @@ const LeagueType = new GraphQLObjectType({
       type: EventConnection,
       args: connectionArgs,
       resolve: (league, args) => connectionFromPromisedArray(
-        EventToLeague.findAsync({leagueId: league.id}).map(doc => eventLoader.load(doc.eventId)),
+        LeagueToEvent.findAsync({leagueId: league.id}).map(doc => eventLoader.load(doc.eventId)),
         args
       )
     },
@@ -47,7 +47,7 @@ const LeagueType = new GraphQLObjectType({
       type: OrganizationConnection,
       args: connectionArgs,
       resolve: (league, args) => connectionFromPromisedArray(
-        OrgToLeague.findAsync({leagueId: league.id}).map(doc => organizationLoader.load(doc.orgId)),
+        LeagueToOrg.findAsync({leagueId: league.id}).map(doc => organizationLoader.load(doc.orgId)),
         args
       )
     },
@@ -55,7 +55,7 @@ const LeagueType = new GraphQLObjectType({
       type: UserConnection,
       args: connectionArgs,
       resolve: (league, args) => connectionFromPromisedArray(
-        UserToLeague.findAsync({leagueId: league.id}).map(doc => userLoader.load(doc.userId)),
+        LeagueToUser.findAsync({leagueId: league.id}).map(doc => userLoader.load(doc.userId)),
         args
       )
     }

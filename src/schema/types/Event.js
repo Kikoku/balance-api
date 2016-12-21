@@ -10,10 +10,10 @@ import {
   connectionFromPromisedArray
 } from 'graphql-relay';
 import { MatchConnection } from './Match';
-import MatchToEvent from '../../../models/relationships/MatchToEvent';
+import EventtoMatch from '../../../models/relationships/EventToMatch';
 import OrganizationType from '../types/Organization';
 import { UserConnection } from './User';
-import UserToEvent from '../../../models/relationships/UserToEvent';
+import EventToUser from '../../../models/relationships/EventToUser';
 import {
   matchLoader,
   organizationLoader,
@@ -41,7 +41,7 @@ const EventType = new GraphQLObjectType({
       type: MatchConnection,
       args: connectionArgs,
       resolve: (event, args) => connectionFromPromisedArray(
-        MatchToEvent.findAsync({eventId: event.id}).map(doc => matchLoader.load(doc.matchId)),
+        EventToMatch.findAsync({eventId: event.id}).map(doc => matchLoader.load(doc.matchId)),
         args
       )
     },
@@ -52,7 +52,7 @@ const EventType = new GraphQLObjectType({
     users: {
       type: UserConnection,
       resolve: (event, args) => connectionFromPromisedArray(
-        UserToEvent.findAsync({eventId: event.id}).map(doc => userLoader.load(doc.userId)),
+        EventToUser.findAsync({eventId: event.id}).map(doc => userLoader.load(doc.userId)),
         args
       )
     }
