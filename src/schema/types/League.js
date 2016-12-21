@@ -5,8 +5,13 @@ import {
 } from 'graphql';
 import {
   globalIdField,
-  connectionDefinitions
-} from 'graphql-relay'
+  connectionDefinitions,
+  connectionArgs,
+  connectionFromPromisedArray
+} from 'graphql-relay';
+import { EventConnection } from './Event';
+import EventToLeague from '../../../models/relationshipts/EventToLeauge';
+import Event from '../../../models/types/Event';
 import { nodeInterface  } from '../node';
 
 const LeagueType = new GraphQLObjectType({
@@ -21,6 +26,17 @@ const LeagueType = new GraphQLObjectType({
     },
     enddate: {
       type: GraphQLString
+    },
+    events: {
+      type: EventConnection,
+      args: connectionArgs,
+      resolve: (league, args) => {
+        return connectionFromPromisedArray(
+          EventToLeague.findAsync({leagueId: league.id})
+          .then(doc => Event.findAsync(doc.eventId)),
+          args
+        )
+      }
     }
   }),
   interfaces: () => [nodeInterface]
