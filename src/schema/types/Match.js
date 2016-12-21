@@ -1,11 +1,16 @@
 import {
   GraphQLObjectType,
-  GraphQLInt
+  GraphQLInt,
+  GraphQLList
 } from 'graphql';
 import {
   globalIdField,
-  connectionDefinitions
-} from 'graphql-relay'
+  connectionDefinitions,
+  connectionArgs,
+  connectionFromPromisedArray
+} from 'graphql-relay';
+import ResultMatchType from './ResultMatch';
+import MatchToUser from '../../../models/relationships/MatchToUser';
 import { nodeInterface  } from '../node';
 
 const MatchType = new GraphQLObjectType({
@@ -14,6 +19,10 @@ const MatchType = new GraphQLObjectType({
     id: globalIdField(),
     round: {
       type: GraphQLInt
+    },
+    results: {
+      type: new GraphQLList(ResultMatchType),
+      resolve: (match) => MatchToUser.findAsync({matchId: match.id})
     }
   }),
   interfaces: () => [nodeInterface]
