@@ -1,7 +1,7 @@
 import mongoose, { Schema } from 'mongoose';
 import Bluebird from 'bluebird';
 
-const userToMatchSchema = new Schema ({
+const matchToUserSchema = new Schema ({
   userId: {
     type: Schema.ObjectId,
     ref: 'User'
@@ -17,9 +17,9 @@ const userToMatchSchema = new Schema ({
   change: Number
 });
 
-const UserToMatch = mongoose.model('UserToMatch', userToMatchSchema);
+const MatchToUser = mongoose.model('MatchToUser', matchToUserSchema);
 
-Bluebird.promisifyAll(UserToMatch);
-Bluebird.promisifyAll(UserToMatch.prototype);
+Bluebird.promisifyAll(MatchToUser);
+Bluebird.promisifyAll(MatchToUser.prototype);
 
-export default UserToMatch;
+export default MatchToUser;

@@ -1,7 +1,7 @@
 import mongoose, { Schema } from 'mongoose';
 import Bluebird from 'bluebird';
 
-const orgToEventSchema = new Schema ({
+const eventToOrgSchema = new Schema ({
   orgId: {
     type: Schema.ObjectId,
     ref: 'Organization'
@@ -12,9 +12,9 @@ const orgToEventSchema = new Schema ({
   }
 });
 
-const OrgToEvent = mongoose.model('OrgToEvent', orgToEventSchema);
+const EventToOrg = mongoose.model('EventToOrg', eventToOrgSchema);
 
-Bluebird.promisifyAll(OrgToEvent);
-Bluebird.promisifyAll(OrgToEvent.prototype);
+Bluebird.promisifyAll(EventToOrg);
+Bluebird.promisifyAll(EventToOrg.prototype);
 
-export default OrgToEvent;
+export default EventToOrg;

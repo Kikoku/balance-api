@@ -1,7 +1,7 @@
 import mongoose, { Schema } from 'mongoose';
 import Bluebird from 'bluebird';
 
-const userToLeagueSchema = new Schema ({
+const leagueToUserSchema = new Schema ({
   userId: {
     type: Schema.ObjectId,
     ref: 'User'
@@ -18,9 +18,9 @@ const userToLeagueSchema = new Schema ({
   attendance: Number
 });
 
-const UserToLeague = mongoose.model('UserToLeague', userToLeagueSchema);
+const LeagueToUser = mongoose.model('LeagueToUser', leagueToUserSchema);
 
-Bluebird.promisifyAll(UserToLeague);
-Bluebird.promisifyAll(UserToLeague.prototype);
+Bluebird.promisifyAll(LeagueToUser);
+Bluebird.promisifyAll(LeagueToUser.prototype);
 
-export default UserToLeague;
+export default LeagueToUser;
