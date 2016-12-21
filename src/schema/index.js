@@ -16,9 +16,11 @@ import {
 import UserType, { UserConnection } from './types/User';
 import OrganizationType, { OrganizationConnection } from './types/Organization';
 import MatchType, { MatchConnection } from './types/Match';
+import LeagueType, { LeagueConnection } from './types/League';
 import User from '../../models/types/User';
 import Organization from '../../models/types/Organization';
 import Match from '../../models/types/Match';
+import League from '../../models/types/League';
 import { nodeField } from './node';
 
 const queryType = new GraphQLObjectType({
@@ -76,6 +78,24 @@ const queryType = new GraphQLObjectType({
       args: connectionArgs,
       resolve: (_, args) => connectionFromPromisedArray(
         Match.findAsync(),
+        args
+      )
+    },
+    league: {
+      type: LeagueType,
+      args: {
+        id: {
+          type: new GraphQLNonNull(GraphQLID),
+          description: 'ID of a League.'
+        }
+      },
+      resolve: (_, args) => matchLoader.load(args.id)
+    },
+    leagues: {
+      type: LeagueConnection,
+      args: connectionArgs,
+      resolve: (_, args) => connectionFromPromisedArray(
+        League.findAsync(),
         args
       )
     }

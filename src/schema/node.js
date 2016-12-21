@@ -22,6 +22,9 @@ export const { nodeInterface, nodeField } = nodeDefinitions(
     if(object.round) {
       return MatchType
     }
+    if(object.title && !object.eventguid) {
+      return LeaugeType
+    }
     return null;
   }
 )
