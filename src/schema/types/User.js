@@ -29,7 +29,7 @@ const UserType = new GraphQLObjectType({
       type: GraphQLString
     }
   }),
-  interfaces: [nodeInterface]
+  interfaces: () => [nodeInterface]
 });
 
 export const { connectionType: UserConnection } = connectionDefinitions({
