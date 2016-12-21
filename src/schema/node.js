@@ -2,7 +2,8 @@ import {
   nodeDefinitions,
   fromGlobalId
 } from 'graphql-relay';
-import UserType from './types/user';
+import UserType from './types/User';
+import OrganizationType from './types/Organization'
 import { getObjectById } from './schemaHelpers';
 
 export const { nodeInterface, nodeField } = nodeDefinitions(
@@ -11,7 +12,7 @@ export const { nodeInterface, nodeField } = nodeDefinitions(
     return getObjectById(type.toLowerCase(), id)
   },
   (object) => {
-    if(object.name) {
+    if(object.dci) {
       return UserType;
     }
     return null;

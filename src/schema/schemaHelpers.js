@@ -1,5 +1,5 @@
 import DataLoader from 'dataloader';
-import User from '../../models/types/user';
+import User from '../../models/types/User';
 
 const getUserById = (id) => {
   return User.findByIdAsync(id)

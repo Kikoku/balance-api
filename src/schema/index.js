@@ -8,9 +8,9 @@ import {
   connectionFromPromisedArray,
   connectionArgs
 } from 'graphql-relay';
-import userLoader from './schemaHelpers.js'
-import UserType, { UserConnection } from './types/user';
-import User from '../../models/types/user';
+import { userLoader } from './schemaHelpers.js'
+import UserType, { UserConnection } from './types/User';
+import User from '../../models/types/User';
 import { nodeField } from './node';
 
 const queryType = new GraphQLObjectType({
