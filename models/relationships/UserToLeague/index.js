@@ -11,7 +11,7 @@ const userToLeagueSchema = new Schema ({
     ref: 'League'
   },
   win: Number,
-  loss: Number
+  loss: Number,
   draw: Number,
   elo: Number,
   change: Number,
