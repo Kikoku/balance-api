@@ -12,6 +12,7 @@ import {
 import { MatchConnection } from './Match';
 import EventToMatch from '../../../models/relationships/EventToMatch';
 import OrganizationType from '../types/Organization';
+import EventToOrg from '../../../models/relationships/EventToOrg';
 import { UserConnection } from './User';
 import EventToUser from '../../../models/relationships/EventToUser';
 import {
@@ -47,7 +48,7 @@ const EventType = new GraphQLObjectType({
     },
     organization: {
       type: OrganizationType,
-      resolve: (event, args) => organizationLoader.load(event.id)
+      resolve: (event, args) => EventToOrg.findOneAsync({eventId: event.id}).then(doc => organizationLoader.load(doc.orgId))
     },
     users: {
       type: UserConnection,
