@@ -10,7 +10,7 @@ import {
   connectionFromPromisedArray
 } from 'graphql-relay';
 import { MatchConnection } from './Match';
-import EventtoMatch from '../../../models/relationships/EventToMatch';
+import EventToMatch from '../../../models/relationships/EventToMatch';
 import OrganizationType from '../types/Organization';
 import { UserConnection } from './User';
 import EventToUser from '../../../models/relationships/EventToUser';
