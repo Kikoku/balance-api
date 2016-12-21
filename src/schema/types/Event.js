@@ -5,8 +5,15 @@ import {
 } from 'graphql';
 import {
   globalIdField,
-  connectionDefinitions
-} from 'graphql-relay'
+  connectionDefinitions,
+  connectionArgs,
+  connectionFromPromisedArray
+} from 'graphql-relay';
+import { MatchConnection } from './Match.js';
+import MatchToEvent from '../../../models/relationships/MatchToEvent';
+import {
+  matchLoader
+} from '../schemaHelpers';
 import { nodeInterface  } from '../node';
 
 const EventType = new GraphQLObjectType({
@@ -24,6 +31,11 @@ const EventType = new GraphQLObjectType({
     },
     startdate: {
       type: GraphQLString
+    },
+    matches: {
+      type: MatchConnection,
+      args: connectionArgs,
+      resolve: (event, args) => connectionFromPromisedArray(MatchToEvent.findAsync({eventId: event.id}).map(doc => matchLoader.load(doc.matchId)))
     }
   }),
   interfaces: () => [nodeInterface]
