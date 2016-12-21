@@ -60,6 +60,19 @@ export const matchLoader = new DataLoader(
   }
 )
 
+export const getObjectsByType = (type) => {
+
+  const types = {
+    user: User.findAsync(),
+    organization: Organization.findAsync(),
+    league: League.findAsync(),
+    event: Event.findAsync(),
+    match: Match.findAsync()
+  }
+
+  return types[type]
+}
+
 export const getObjectById = (type, id) => {
 
   const types = {
