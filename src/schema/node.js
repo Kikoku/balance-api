@@ -15,6 +15,9 @@ export const { nodeInterface, nodeField } = nodeDefinitions(
     if(object.dci) {
       return UserType;
     }
+    if(object.password) {
+      return OrganizationType
+    }
     return null;
   }
 )
