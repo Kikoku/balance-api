@@ -13,7 +13,9 @@ import {
   organzationLoader,
   matchLoader,
   leagueLoader,
-  eventLoader
+  eventLoader,
+  getObjectsByType,
+  getObjectById
 } from './schemaHelpers.js'
 import UserType, { UserConnection } from './types/User';
 import OrganizationType, { OrganizationConnection } from './types/Organization';
@@ -27,100 +29,44 @@ import League from '../../models/types/League';
 import Event from '../../models/types/Event';
 import { nodeField } from './node';
 
+const rootField = (GQLType, type) => {
+  return {
+    type: GQLType,
+    args: {
+      id: {
+        type: new GraphQLNonNull(GraphQLID),
+        description: `ID of a ${type}`
+      }
+    },
+    resolve: (_, args) => getObjectById(type, args.id)
+  }
+}
+
+const rootConnection = (connection, type) => {
+  return {
+    type: connection,
+    args: connectionArgs,
+    resolve: (_, args) => connectionFromPromisedArray(
+      getObjectsByType(type),
+      args
+    )
+  }
+}
+
 const queryType = new GraphQLObjectType({
   name: 'Query',
   fields: () => ({
     node: nodeField,
-    user: {
-      type: UserType,
-      args: {
-        id: {
-          type: new GraphQLNonNull(GraphQLID),
-          description: 'ID of a User.'
-        }
-      },
-      resolve: (_, args) => userLoader.load(args.id)
-    },
-    users: {
-      type: UserConnection,
-      args: connectionArgs,
-      resolve: (_, args) => connectionFromPromisedArray(
-        User.findAsync(),
-        args
-      )
-    },
-    organzation: {
-      type: OrganizationType,
-      args: {
-        id: {
-          type: new GraphQLNonNull(GraphQLID),
-          description: 'ID of a Organization.'
-        }
-      },
-      resolve: (_, args) => organzationLoader.load(args.id)
-    },
-    organizations: {
-      type: OrganizationConnection,
-      args: connectionArgs,
-      resolve: (_, args) => connectionFromPromisedArray(
-        Organization.findAsync(),
-        args
-      )
-    },
-    match: {
-      type: MatchType,
-      args: {
-        id: {
-          type: new GraphQLNonNull(GraphQLID),
-          description: 'ID of a Match.'
-        }
-      },
-      resolve: (_, args) => matchLoader.load(args.id)
-    },
-    matches: {
-      type: MatchConnection,
-      args: connectionArgs,
-      resolve: (_, args) => connectionFromPromisedArray(
-        Match.findAsync(),
-        args
-      )
-    },
-    league: {
-      type: LeagueType,
-      args: {
-        id: {
-          type: new GraphQLNonNull(GraphQLID),
-          description: 'ID of a League.'
-        }
-      },
-      resolve: (_, args) => matchLoader.load(args.id)
-    },
-    leagues: {
-      type: LeagueConnection,
-      args: connectionArgs,
-      resolve: (_, args) => connectionFromPromisedArray(
-        League.findAsync(),
-        args
-      )
-    },
-    event: {
-      type: EventType,
-      args: {
-        id: {
-          type: new GraphQLNonNull(GraphQLID),
-          description: 'ID of an Event.'
-        }
-      },
-      resolve: (_, args) => eventLoader.load(args.id)
-    },
-    events: {
-      type: EventConnection,
-      args: connectionArgs,
-      resolve: (_, args) => connectionFromPromisedArray(
-        Event.findAsync(),
-        args
-      )
-    }
+    user: rootField(UserType, 'user'),
+    users: rootConnection(UserConnection, 'user'),
+    organzation: rootField(OrganizationType, 'organization'),
+    organizations: rootConnection(OrganizationConnection, 'organization'),
+    match: rootField(MatchType, 'match'),
+    matches: rootConnection(MatchConnection, 'match'),
+    league:rootField(LeagueType, 'league'),
+    leagues: rootConnection(LeagueConnection, 'league'),
+    event: rootField(EventType, 'event'),
+    events: rootConnection(EventConnection, 'event')
   })
 })
 
