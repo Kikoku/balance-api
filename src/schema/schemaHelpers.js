@@ -15,22 +15,22 @@ export const userLoader = new DataLoader(
   }
 )
 
-export const getOrganizationById = (id) => {
+const getOrganizationById = (id) => {
   return Organization.findByIdAsync(id)
 }
 
-const organizationLoader = new DataLoader(
+export const organizationLoader = new DataLoader(
   keys => Promise.all(keys.map(getOrganizationById)),
   {
     cacheKeyFn: key => key.toString()
   }
 )
 
-export const getLeagueById = (id) => {
+const getLeagueById = (id) => {
   return League.findByIdAsync(id)
 }
 
-export const getMatchById = (id) => {
+export const leagueLoader = new DataLoader(
   keys => Promise.all(keys.map(getLeagueById)),
   {
     cacheKeyFn: key => key.toString()
@@ -40,7 +40,7 @@ export const getMatchById = (id) => {
   return Match.findByIdAsync(id)
 }
 
-const matchLoader = new DataLoader(
+export const matchLoader = new DataLoader(
   keys => Promise.all(keys.map(getMatchById)),
   {
     cacheKeyFn: key => key.toString()
