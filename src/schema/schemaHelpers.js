@@ -2,6 +2,7 @@ import DataLoader from 'dataloader';
 import User from '../../models/types/User';
 import Organization from '../../models/types/Organization';
 import League from '../../models/types/League';
+import Event from '../../models/types/Event';
 import Match from '../../models/types/Match';
 
 const getUserById = (id) => {
@@ -37,6 +38,18 @@ export const leagueLoader = new DataLoader(
   }
 )
 
+const getEventById = (id) => {
+  return Event.findByIdAsync(id)
+}
+
+export const eventLoader = new DataLoader(
+  keys => Promise.all(keys.map(getEventById)),
+  {
+    cacheKeyFn: key => key.toString()
+  }
+)
+
+const getMatchById = (id) => {
   return Match.findByIdAsync(id)
 }
 
@@ -53,6 +66,7 @@ export const getObjectById = (type, id) => {
     user: getUserById,
     organization: getOrganizationById,
     league: getLeagueById,
+    event: getEventById,
     match: getMatchById
   }
 

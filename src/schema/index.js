@@ -11,16 +11,20 @@ import {
 import {
   userLoader,
   organzationLoader,
-  matchLoader
+  matchLoader,
+  leagueLoader,
+  eventLoader
 } from './schemaHelpers.js'
 import UserType, { UserConnection } from './types/User';
 import OrganizationType, { OrganizationConnection } from './types/Organization';
 import MatchType, { MatchConnection } from './types/Match';
 import LeagueType, { LeagueConnection } from './types/League';
+import EventType, { EventConnection } from './types/Event';
 import User from '../../models/types/User';
 import Organization from '../../models/types/Organization';
 import Match from '../../models/types/Match';
 import League from '../../models/types/League';
+import Event from '../../models/types/Event';
 import { nodeField } from './node';
 
 const queryType = new GraphQLObjectType({
@@ -96,6 +100,24 @@ const queryType = new GraphQLObjectType({
       args: connectionArgs,
       resolve: (_, args) => connectionFromPromisedArray(
         League.findAsync(),
+        args
+      )
+    },
+    event: {
+      type: EventType,
+      args: {
+        id: {
+          type: new GraphQLNonNull(GraphQLID),
+          description: 'ID of an Event.'
+        }
+      },
+      resolve: (_, args) => eventLoader.load(args.id)
+    },
+    events: {
+      type: EventConnection,
+      args: connectionArgs,
+      resolve: (_, args) => connectionFromPromisedArray(
+        Event.findAsync(),
         args
       )
     }

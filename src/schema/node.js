@@ -5,6 +5,7 @@ import {
 import UserType from './types/User';
 import OrganizationType from './types/Organization';
 import MatchType from './types/Match';
+import EventType from './types/Event';
 import { getObjectById } from './schemaHelpers';
 
 export const { nodeInterface, nodeField } = nodeDefinitions(
@@ -17,13 +18,16 @@ export const { nodeInterface, nodeField } = nodeDefinitions(
       return UserType;
     }
     if(object.password) {
-      return OrganizationType
+      return OrganizationType;
     }
     if(object.round) {
-      return MatchType
+      return MatchType;
+    }
+    if(object.eventguid) {
+      return EventType;
     }
     if(object.title && !object.eventguid) {
-      return LeaugeType
+      return LeaugeType;
     }
     return null;
   }
