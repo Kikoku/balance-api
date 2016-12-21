@@ -10,10 +10,10 @@ import {
   connectionFromPromisedArray
 } from 'graphql-relay';
 import { EventConnection } from './Event';
-import EventToLeague from '../../../models/relationshipts/EventToLeauge';
+import EventToLeague from '../../../models/relationships/EventToLeauge';
 import Event from '../../../models/types/Event';
 import { OrganizationConnection } from './Organization';
-import OrgToLeague from '../../../models/relationshipts/OrgToLeague';
+import OrgToLeague from '../../../models/relationships/OrgToLeague';
 import Organization from '../../../models/types/Organization';
 import { nodeInterface  } from '../node';
 
