@@ -11,7 +11,7 @@ const userToMatchSchema = new Schema ({
     ref: 'Match'
   },
   win: Number,
-  loss: Number
+  loss: Number,
   draw: Number,
   elo: Number,
   change: Number
