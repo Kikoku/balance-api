@@ -8,11 +8,17 @@ import {
   connectionFromPromisedArray,
   connectionArgs
 } from 'graphql-relay';
-import { userLoader } from './schemaHelpers.js'
+import {
+  userLoader,
+  organzationLoader,
+  matchLoader
+} from './schemaHelpers.js'
 import UserType, { UserConnection } from './types/User';
 import OrganizationType, { OrganizationConnection } from './types/Organization';
+import MatchType, { MatchConnection } from './types/Match';
 import User from '../../models/types/User';
 import Organization from '../../models/types/Organization';
+import Match from '../../models/types/Match';
 import { nodeField } from './node';
 
 const queryType = new GraphQLObjectType({
@@ -52,6 +58,24 @@ const queryType = new GraphQLObjectType({
       args: connectionArgs,
       resolve: (_, args) => connectionFromPromisedArray(
         Organization.findAsync(),
+        args
+      )
+    },
+    match: {
+      type: MatchType,
+      args: {
+        id: {
+          type: new GraphQLNonNull(GraphQLID),
+          description: 'ID of a Match.'
+        }
+      },
+      resolve: (_, args) => matchLoader.load(args.id)
+    },
+    matches: {
+      type: MatchConnection,
+      args: connectionArgs,
+      resolve: (_, args) => connectionFromPromisedArray(
+        Match.findAsync(),
         args
       )
     }

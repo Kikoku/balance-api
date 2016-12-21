@@ -1,6 +1,7 @@
 import DataLoader from 'dataloader';
 import User from '../../models/types/User';
 import Organization from '../../models/types/Organization';
+import Match from '../../models/types/Match';
 
 const getUserById = (id) => {
   return User.findByIdAsync(id)
@@ -28,12 +29,23 @@ export const getLeagueById = (id) => {
   return League.findByIdAsync(id)
 }
 
+export const getMatchById = (id) => {
+  return Match.findByIdAsync(id)
+}
+
+const matchLoader = new DataLoader(
+  keys => Promise.all(keys.map(getMatchById)),
+  {
+    cacheKeyFn: key => key.toString()
+  }
+)
 
 export const getObjectById = (type, id) => {
 
   const types = {
     user: getUserById,
     organization: getOrganizationById,
+    match: getMatchById
   }
 
   return types[type](id)

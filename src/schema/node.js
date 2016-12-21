@@ -3,7 +3,8 @@ import {
   fromGlobalId
 } from 'graphql-relay';
 import UserType from './types/User';
-import OrganizationType from './types/Organization'
+import OrganizationType from './types/Organization';
+import MatchType from './types/Match';
 import { getObjectById } from './schemaHelpers';
 
 export const { nodeInterface, nodeField } = nodeDefinitions(
@@ -17,6 +18,9 @@ export const { nodeInterface, nodeField } = nodeDefinitions(
     }
     if(object.password) {
       return OrganizationType
+    }
+    if(object.round) {
+      return MatchType
     }
     return null;
   }
