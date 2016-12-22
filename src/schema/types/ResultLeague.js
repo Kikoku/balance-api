@@ -8,8 +8,10 @@ import {
   connectionDefinitions
 } from 'graphql-relay';
 import UserType from './User';
+import LeagueType from './League';
 import {
-  userLoader
+  userLoader,
+  leagueLoader
 } from '../schemaHelpers';
 import { nodeInterface  } from '../node';
 
@@ -17,6 +19,10 @@ const ResultLeagueType = new GraphQLObjectType({
   name: 'ResultLeague',
   fields: () => ({
     id: globalIdField(),
+    leagueId: {
+      type: LeagueType,
+      resolve: (result, args) => leagueLoader.load(result.leagueId)
+    },
     userId: {
       type: UserType,
       resolve: (result, args) => userLoader.load(result.userId)
