@@ -5,8 +5,12 @@ import {
 } from 'graphql';
 import {
   globalIdField,
-  connectionDefinitions
-} from 'graphql-relay'
+  connectionDefinitions,
+  connectionArgs,
+  connectionFromPromisedArray
+} from 'graphql-relay';
+import { ResultLeagueConnection } from './ResultLeague';
+import LeagueToUser from '../../../models/relationships/LeagueToUser';
 import { nodeInterface  } from '../node';
 
 const UserType = new GraphQLObjectType({
@@ -27,6 +31,14 @@ const UserType = new GraphQLObjectType({
     },
     country: {
       type: GraphQLString
+    },
+    leagues: {
+      type: ResultLeagueConnection,
+      args: connectionArgs,
+      resolve: (user, args) => connectionFromPromisedArray(
+        LeagueToUser.findAsync({userId: user.id}),
+        args
+      )
     }
   }),
   interfaces: () => [nodeInterface]
