@@ -18,7 +18,7 @@ import {
   eventLoader,
   getObjectsByType,
   getObjectById
-} from './schemaHelpers.js'
+} from './schemaHelpers.js';
 import UserType, { UserConnection } from './types/User';
 import OrganizationType, { OrganizationConnection } from './types/Organization';
 import MatchType, { MatchConnection } from './types/Match';
@@ -29,6 +29,7 @@ import Organization from '../../models/types/Organization';
 import Match from '../../models/types/Match';
 import League from '../../models/types/League';
 import Event from '../../models/types/Event';
+import LeagueToUser from '../../models/relationships/LeagueToUser';
 import { nodeField } from './node';
 
 const rootField = (GQLType, type) => {
@@ -106,10 +107,25 @@ const mutationType = new GraphQLObjectType({
           country: "",
           ...args
         });
+
+        let overallLeague = new LeagueToUser({
+          leagueId: "585aa055255630174895b98c",
+          win: 0,
+          loss: 0,
+          draw: 0,
+          elo: 1600,
+          change: 0,
+          attendance: 0
+        })
         return newUser.saveAsync()
-        .then(user => ({
+        .then(user => {
+
+          overallLeague.userId = user.id;
+          overallLeague.saveAsync();
+          return {
             userId:user.id
-        }))
+          }
+        })
       }
     })
   })
