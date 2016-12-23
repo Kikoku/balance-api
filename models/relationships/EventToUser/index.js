@@ -9,7 +9,12 @@ const eventToUserSchema = new Schema ({
   eventId: {
     type: Schema.ObjectId,
     ref: 'Event'
-  }
+  },
+  win: Number,
+  loss: Number,
+  draw: Number,
+  elo: Number,
+  change: Number
 });
 
 const EventToUser = mongoose.model('EventToUser', eventToUserSchema);
