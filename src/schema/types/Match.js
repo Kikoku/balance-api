@@ -1,7 +1,6 @@
 import {
   GraphQLObjectType,
-  GraphQLInt,
-  GraphQLList
+  GraphQLInt
 } from 'graphql';
 import {
   globalIdField,
@@ -21,8 +20,8 @@ const MatchType = new GraphQLObjectType({
       type: GraphQLInt
     },
     results: {
-      type: new GraphQLList(ResultMatchType),
-      resolve: (match) => MatchToUser.findAsync({matchId: match.id})
+      type: ResultMatchType,
+      resolve: (match) => MatchToUser.findByIdAsync({matchId: match.id})
     }
   }),
   interfaces: () => [nodeInterface]
