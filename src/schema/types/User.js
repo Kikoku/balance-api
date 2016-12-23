@@ -10,7 +10,9 @@ import {
   connectionFromPromisedArray
 } from 'graphql-relay';
 import { ResultLeagueConnection } from './ResultLeague';
+import { ResultEventConnection } from './ResultEvent';
 import LeagueToUser from '../../../models/relationships/LeagueToUser';
+import EventToUser from '../../../models/relationships/EventToUser';
 import { nodeInterface  } from '../node';
 
 const UserType = new GraphQLObjectType({
@@ -37,6 +39,14 @@ const UserType = new GraphQLObjectType({
       args: connectionArgs,
       resolve: (user, args) => connectionFromPromisedArray(
         LeagueToUser.findAsync({userId: user.id}),
+        args
+      )
+    },
+    events: {
+      type: ResultEventConnection,
+      args: connectionArgs,
+      resolve: (user, args) => connectionFromPromisedArray(
+        EventToUser.findAsync({userId: user.id}),
         args
       )
     }
