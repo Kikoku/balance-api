@@ -31,6 +31,7 @@ import League from '../../models/types/League';
 import Event from '../../models/types/Event';
 import LeagueToUser from '../../models/relationships/LeagueToUser';
 import { nodeField } from './node';
+import { mutationType } from './mutations';
 
 const rootField = (GQLType, type) => {
   return {
@@ -70,89 +71,6 @@ const queryType = new GraphQLObjectType({
     leagues: rootConnection(LeagueConnection, 'league'),
     event: rootField(EventType, 'event'),
     events: rootConnection(EventConnection, 'event')
-  })
-})
-
-const mutationType = new GraphQLObjectType({
-  name: 'Mutation',
-  fields: () => ({
-    newOrganization: mutationWithClientMutationId({
-      name: 'newOrganization',
-      inputFields: {
-        name: {
-          type: new GraphQLNonNull(GraphQLString)
-        },
-        email: {
-          type: new GraphQLNonNull(GraphQLString)
-        },
-        password: {
-          type: new GraphQLNonNull(GraphQLString)
-        }
-      },
-      outputFields: {
-        organization: {
-          type: OrganizationType,
-          resolve: (payload) => payload
-        }
-      },
-      mutateAndGetPayload: (args) => {
-        let newOrg = new Organization(args)
-        return newOrg.saveAsync();
-      }
-    }),
-    newUser: mutationWithClientMutationId({
-      name: 'newUser',
-      inputFields: {
-        first: {
-          type: new GraphQLNonNull(GraphQLString)
-        },
-        middle: {
-          type: GraphQLString
-        },
-        last: {
-          type: new GraphQLNonNull(GraphQLString)
-        },
-        dci: {
-          type: new GraphQLNonNull(GraphQLString)
-        },
-        country: {
-          type: GraphQLString
-        }
-      },
-      outputFields: {
-        user: {
-          type: UserType,
-          resolve: (payload) => User.findByIdAsync(payload.userId)
-        }
-      },
-      mutateAndGetPayload: (args) => {
-        let newUser = new User({
-          middle: "",
-          country: "",
-          ...args
-        });
-
-        let overallLeague = new LeagueToUser({
-          leagueId: "585aa055255630174895b98c",
-          win: 0,
-          loss: 0,
-          draw: 0,
-          elo: 1600,
-          change: 0,
-          attendance: 0
-        })
-
-        return newUser.saveAsync()
-        .then(user => {
-
-          overallLeague.userId = user.id;
-          overallLeague.saveAsync();
-          return {
-            userId:user.id
-          }
-        })
-      }
-    })
   })
 })
 
