@@ -76,6 +76,30 @@ const queryType = new GraphQLObjectType({
 const mutationType = new GraphQLObjectType({
   name: 'Mutation',
   fields: () => ({
+    newOrganization: mutationWithClientMutationId({
+      name: 'newOrganization',
+      inputFields: {
+        name: {
+          type: new GraphQLNonNull(GraphQLString)
+        },
+        email: {
+          type: new GraphQLNonNull(GraphQLString)
+        },
+        password: {
+          type: new GraphQLNonNull(GraphQLString)
+        }
+      },
+      outputFields: {
+        organization: {
+          type: OrganizationType,
+          resolve: (payload) => payload
+        }
+      },
+      mutateAndGetPayload: (args) => {
+        let newOrg = new Organization(args)
+        return newOrg.saveAsync();
+      }
+    }),
     newUser: mutationWithClientMutationId({
       name: 'newUser',
       inputFields: {
@@ -117,6 +141,7 @@ const mutationType = new GraphQLObjectType({
           change: 0,
           attendance: 0
         })
+
         return newUser.saveAsync()
         .then(user => {
 
