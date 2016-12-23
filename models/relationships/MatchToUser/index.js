@@ -2,7 +2,11 @@ import mongoose, { Schema } from 'mongoose';
 import Bluebird from 'bluebird';
 
 const matchToUserSchema = new Schema ({
-  userId: {
+  player: {
+    type: Schema.ObjectId,
+    ref: 'User'
+  },
+  opponent: {
     type: Schema.ObjectId,
     ref: 'User'
   },

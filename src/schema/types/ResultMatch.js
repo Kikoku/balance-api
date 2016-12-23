@@ -17,9 +17,13 @@ const ResultMatchType = new GraphQLObjectType({
   name: 'ResultMatch',
   fields: () => ({
     id: globalIdField(),
-    userId: {
+    player: {
       type: UserType,
-      resolve: (result, args) => userLoader.load(result.userId)
+      resolve: (result, args) => userLoader.load(result.player)
+    },
+    opponent: {
+      type: UserType,
+      resolve: (result, args) => userLoader.load(result.opponent)
     },
     win: {
       type: GraphQLInt
