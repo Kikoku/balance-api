@@ -2,20 +2,13 @@ import {
   GraphQLObjectType,
   GraphQLSchema,
   GraphQLNonNull,
-  GraphQLID,
-  GraphQLString
+  GraphQLID
 } from 'graphql';
 import {
   connectionFromPromisedArray,
-  connectionArgs,
-  mutationWithClientMutationId
+  connectionArgs
 } from 'graphql-relay';
 import {
-  userLoader,
-  organzationLoader,
-  matchLoader,
-  leagueLoader,
-  eventLoader,
   getObjectsByType,
   getObjectById
 } from './schemaHelpers.js';
@@ -24,12 +17,6 @@ import OrganizationType, { OrganizationConnection } from './types/Organization';
 import MatchType, { MatchConnection } from './types/Match';
 import LeagueType, { LeagueConnection } from './types/League';
 import EventType, { EventConnection } from './types/Event';
-import User from '../../models/types/User';
-import Organization from '../../models/types/Organization';
-import Match from '../../models/types/Match';
-import League from '../../models/types/League';
-import Event from '../../models/types/Event';
-import LeagueToUser from '../../models/relationships/LeagueToUser';
 import { nodeField } from './node';
 import { mutationType } from './mutations';
 
@@ -63,7 +50,7 @@ const queryType = new GraphQLObjectType({
     node: nodeField,
     user: rootField(UserType, 'user'),
     users: rootConnection(UserConnection, 'user'),
-    organzation: rootField(OrganizationType, 'organization'),
+    organization: rootField(OrganizationType, 'organization'),
     organizations: rootConnection(OrganizationConnection, 'organization'),
     match: rootField(MatchType, 'match'),
     matches: rootConnection(MatchConnection, 'match'),
