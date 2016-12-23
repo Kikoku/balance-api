@@ -8,8 +8,10 @@ import {
   connectionDefinitions
 } from 'graphql-relay';
 import UserType from './User';
+import EventType from './Event';
 import {
-  userLoader
+  userLoader,
+  eventLoader
 } from '../schemaHelpers';
 import { nodeInterface  } from '../node';
 
@@ -17,6 +19,10 @@ const ResultEventType = new GraphQLObjectType({
   name: 'ResultEvent',
   fields: () => ({
     id: globalIdField(),
+    eventId: {
+      type: EventType,
+      resolve: (result, args) => eventLoader.load(result.eventId)
+    },
     player: {
       type: UserType,
       resolve: (result, args) => userLoader.load(result.player)
