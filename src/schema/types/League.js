@@ -10,7 +10,7 @@ import {
   connectionFromPromisedArray
 } from 'graphql-relay';
 import { EventConnection } from './Event';
-import LeagueToEvent from '../../../models/relationships/LeaugeToEvent';
+import LeagueToEvent from '../../../models/relationships/LeagueToEvent';
 import { OrganizationConnection } from './Organization';
 import LeagueToOrg from '../../../models/relationships/LeagueToOrg';
 import { ResultLeagueConnection } from './ResultLeague';
