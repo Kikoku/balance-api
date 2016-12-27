@@ -20,7 +20,8 @@ const OrganizationType = new GraphQLObjectType({
       type: GraphQLString
     },
     password: {
-      type: GraphQLString
+      type: GraphQLString,
+      resolve: () => null
     }
   }),
   interfaces: () => [nodeInterface]
