@@ -34,8 +34,8 @@ export const login = mutationWithClientMutationId({
       .populate('roles')
       .exec((err, org) => {
         if(org.password === password) {
-          // TODO: create jwt secret move to env variable
           resolve({
+            orgId: org.id,
             access_token: jwt.sign(org, process.env.JWT_SECRET)
           })
         } else {
