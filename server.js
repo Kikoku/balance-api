@@ -3,7 +3,8 @@ import express from 'express';
 import graphQLHTTP from 'express-graphql';
 import schema from './src/schema';
 import mongoose from 'mongoose';
-import cors from 'cors'
+import cors from 'cors';
+import jwt from 'jsonwebtoken';
 
 mongoose.connect('mongodb://localhost/balance-api', (err) => {
   if(err) console.error(err)
@@ -15,13 +16,20 @@ const PORT = process.env.PORT || 8080;
 
 app.use('/', cors(), graphQLHTTP( req => {
 
-  // TODO: Pull viewer information from auth_token
-  const viewer = {id: ""};
+  let context = {};
+
+  // TODO: create jwt secret move to env variable
+  if (req.headers.authorization) {
+    let decoded = jwt.decode(req.headers.authorization, 'secret')
+    if(decoded) {
+      context.viewer = decoded._doc
+    } else {
+      context.viewer = null
+    }
+  }
 
   return {
-    context: {
-      viewer
-    },
+    context,
     schema: schema,
     pretty: true,
     graphiql: true
