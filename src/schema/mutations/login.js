@@ -28,19 +28,22 @@ export const login = mutationWithClientMutationId({
     }
   },
   mutateAndGetPayload: ({email, password}) => {
-    return Organization.findOneAsync({email: email})
-    .then(org => {
-      // TODO: create compare function and has password
-      if(org.password === password) {
-        // TODO: create jwt secret move to env variable
-        return {
-          access_token: jwt.sign(org, 'secret')
+
+    return new Promise((resolve, reject) => {
+      Organization.findOne({email: email})
+      .populate('roles')
+      .exec((err, org) => {
+        if(org.password === password) {
+          // TODO: create jwt secret move to env variable
+          resolve({
+            access_token: jwt.sign(org, process.env.JWT_SECRET)
+          })
+        } else {
+          resolve({
+            error: 'Invalid credentials'
+          })
         }
-      } else {
-        return {
-          error: 'Invalid credentials'
-        }
-      }
+      })
     })
   }
 })
