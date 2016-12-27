@@ -5,8 +5,9 @@ import schema from './src/schema';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import jwt from 'jsonwebtoken';
+require('dotenv').config();
 
-mongoose.connect('mongodb://localhost/balance-api', (err) => {
+mongoose.connect(process.env.MONGODB_URI, (err) => {
   if(err) console.error(err)
   else console.log('Mongodb connected')
 })
@@ -20,7 +21,7 @@ app.use('/', cors(), graphQLHTTP( req => {
 
   // TODO: create jwt secret move to env variable
   if (req.headers.authorization) {
-    let decoded = jwt.decode(req.headers.authorization, 'secret')
+    let decoded = jwt.decode(req.headers.authorization, process.env.JWT_SECRET)
     if(decoded) {
       context.viewer = decoded._doc
     } else {
