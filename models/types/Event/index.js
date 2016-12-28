@@ -2,16 +2,65 @@ import mongoose, { Schema } from 'mongoose';
 import Bluebird from 'bluebird';
 
 const eventSchema = new Schema ({
+  batchid: {
+    type: String
+  },
+  coordinator: {
+    type: Schema.ObjectId,
+    ref: 'User'
+  },
+  eliminationType: {
+    type: String
+  },
+  enddate: {
+    type: String
+  },
   eventguid: {
     type: String,
     unique: true
+  },
+  eventtypecode: {
+    type: String
+  },
+  format: {
+    type: String
+  },
+  iscasualreportonly: {
+    type: Boolean
+  },
+  isplayoff: {
+    type: Boolean
+  },
+  isstarted: {
+    type: Boolean
+  },
+  manualmatchround: {
+    type: Number
+  },
+  notes: {
+    type: String
+  },
+  numberofrounds: {
+    type: Number
+  },
+  playoffstartround: {
+    type: Number
+  },
+  postevententry: {
+    type: Boolean
   },
   sanctionnumber: {
     type: String,
     unique: true
   },
-  title: String,
-  startdate: String
+  seats: {
+    type: String
+  },
+  startdate: String,
+  status: {
+    type: Number
+  },
+  title: String
 });
 
 const Event = mongoose.model('Event', eventSchema);
