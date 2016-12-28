@@ -18,7 +18,9 @@ const matchToUserSchema = new Schema ({
   loss: Number,
   draw: Number,
   elo: Number,
-  change: Number
+  change: Number,
+  outcome: Number,
+  winbydrop: Boolean
 });
 
 const MatchToUser = mongoose.model('MatchToUser', matchToUserSchema);
