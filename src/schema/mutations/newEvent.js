@@ -1,6 +1,7 @@
 import {
   GraphQLNonNull,
-  GraphQLString
+  GraphQLString,
+  GraphQLList
 } from 'graphql';
 import {
   mutationWithClientMutationId
@@ -9,24 +10,28 @@ import EventType from '../types/Event';
 import Event from '../../../models/types/Event';
 import EventToOrg from '../../../models/relationships/EventToOrg';
 import LeagueToEvent from '../../../models/relationships/LeagueToEvent';
+import EventInputType from '../inputs/EventInput';
+import LogInputType from '../inputs/LogInput';
+import PlayerInputType from '../inputs/PlayerInput';
+import MatchInputType from '../inputs/MatchInput';
 
 export const newEvent = mutationWithClientMutationId({
   name: 'newEvent',
   inputFields: {
-    eventguid: {
-      type: GraphQLString
-    },
-    sanctionnumber: {
-      type: GraphQLString
-    },
-    title: {
-      type: GraphQLString
-    },
-    startdate: {
-      type: GraphQLString
+    event: {
+      type: new GraphQLNonNull(EventInputType)
     },
     leagueId: {
-      type: GraphQLString
+      type: new GraphQLNonNull(GraphQLString)
+    },
+    logs: {
+      type: new GraphQLNonNull(new GraphQLList(LogInputType))
+    },
+    players: {
+      type: new GraphQLNonNull(new GraphQLList(PlayerInputType))
+    },
+    matches: {
+      type: new GraphQLNonNull(new GraphQLList(MatchInputType))
     }
   },
   outputFields: {
@@ -39,20 +44,15 @@ export const newEvent = mutationWithClientMutationId({
       resolve: ({error}) => error
     }
   },
-  mutateAndGetPayload: ({title, startdate, sanctionnumber, eventguid, leagueId}, context ) => {
+  mutateAndGetPayload: ({event, leagueId, logs, players, matches}, context ) => {
 
     if(context.viewer) {
-      let newEvent = new Event({
-        title,
-        startdate,
-        sanctionnumber,
-        eventguid
-      })
+      let newEvent = new Event(event)
       return newEvent.saveAsync()
       .then( event => {
         let newEventToOrg = new EventToOrg({
           eventId: event.id,
-          orgId: context.viewer.id
+          orgId: context.viewer._id
         })
         newEventToOrg.saveAsync();
         let newLeagueToEvent = new LeagueToEvent({
