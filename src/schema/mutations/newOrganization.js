@@ -25,10 +25,27 @@ export const newOrganization = mutationWithClientMutationId({
     organization: {
       type: OrganizationType,
       resolve: (payload) => payload
+    },
+    error: {
+      type: GraphQLString,
+      resolve: ({error}) => error
     }
   },
-  mutateAndGetPayload: (args) => {
-    let newOrg = new Organization(args)
-    return newOrg.saveAsync();
+  mutateAndGetPayload: (args, context) => {
+    if(context.viewer) {
+      if(context.viewer.roles.findIndex((role) => role.name === 'admin') > -1) {
+        let newOrg = new Organization(args)
+        return newOrg.saveAsync();
+      } else {
+        return {
+          error: 'Your account is not authorized to perform this action'
+        }
+      }
+    } else {
+      return {
+        error: 'Your account is not authorized to perform this action'
+      }
+    }
+
   }
 })
