@@ -19,7 +19,6 @@ app.use('/', cors(), graphQLHTTP( req => {
 
   let context = {};
 
-  // TODO: create jwt secret move to env variable
   if (req.headers.authorization) {
     let decoded = jwt.decode(req.headers.authorization, process.env.JWT_SECRET)
     if(decoded) {
