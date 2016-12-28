@@ -48,7 +48,9 @@ const EventType = new GraphQLObjectType({
     },
     organization: {
       type: OrganizationType,
-      resolve: (event, args) => EventToOrg.findByIdAsync({eventId: event.id}).then(doc => organizationLoader.load(doc.orgId))
+      resolve: (event, args) => {
+        return EventToOrg.findOneAsync({eventId: event.id}).then(doc => organizationLoader.load(doc.orgId))
+      }
     },
     results: {
       type: ResultEventConnection,
