@@ -7,7 +7,9 @@ import {
 } from 'graphql-relay';
 import jwt from 'jsonwebtoken';
 import Organization from '../../../models/types/Organization';
+import OrganizationType from '../types/Organization';
 import TokenType from '../types/Token';
+import { organizationLoader } from '../schemaHelpers';
 
 export const login = mutationWithClientMutationId({
   name: 'login',
@@ -22,9 +24,15 @@ export const login = mutationWithClientMutationId({
   outputFields: {
     token: {
       type: TokenType,
-      resolve: (payload) => {
-        return payload
-      }
+      resolve: ({access_token}) => ({access_token})
+    },
+    organization: {
+      type: OrganizationType,
+      resolve: ({orgId}) => orgId ? organizationLoader.load(orgId) : null
+    },
+    error: {
+      type: GraphQLString,
+      resolve: ({error}) => error
     }
   },
   mutateAndGetPayload: ({email, password}) => {
