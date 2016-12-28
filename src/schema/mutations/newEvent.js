@@ -25,9 +25,6 @@ export const newEvent = mutationWithClientMutationId({
     startdate: {
       type: GraphQLString
     },
-    orgId: {
-      type: GraphQLString
-    },
     leagueId: {
       type: GraphQLString
     }
@@ -35,31 +32,40 @@ export const newEvent = mutationWithClientMutationId({
   outputFields: {
     event: {
       type: EventType,
-      resolve: (payload) => {
-        return payload
-      }
+      resolve: ({event}) => event
+    },
+    error: {
+      type: GraphQLString,
+      resolve: ({error}) => error
     }
   },
-  mutateAndGetPayload: ({title, startdate, sanctionnumber, eventguid, orgId, leagueId}) => {
-    let newEvent = new Event({
-      title,
-      startdate,
-      sanctionnumber,
-      eventguid
-    })
-    return newEvent.saveAsync()
-    .then( event => {
-      let newEventToOrg = new EventToOrg({
-        eventId: event.id,
-        orgId
+  mutateAndGetPayload: ({title, startdate, sanctionnumber, eventguid, leagueId}, context ) => {
+
+    if(context.viewer) {
+      let newEvent = new Event({
+        title,
+        startdate,
+        sanctionnumber,
+        eventguid
       })
-      newEventToOrg.saveAsync();
-      let newLeagueToEvent = new LeagueToEvent({
-        eventId: event.id,
-        leagueId
-      })
-      newLeagueToEvent.saveAsync();
-      return event;
-    });
+      return newEvent.saveAsync()
+      .then( event => {
+        let newEventToOrg = new EventToOrg({
+          eventId: event.id,
+          orgId: context.viewer.id
+        })
+        newEventToOrg.saveAsync();
+        let newLeagueToEvent = new LeagueToEvent({
+          eventId: event.id,
+          leagueId
+        })
+        newLeagueToEvent.saveAsync();
+        return {event};
+      });
+    } else {
+      return {
+        error: 'Your account is not authorized to perform this action'
+      }
+    }
   }
 })

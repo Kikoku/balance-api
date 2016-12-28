@@ -20,33 +20,38 @@ export const newLeague = mutationWithClientMutationId({
     },
     enddate: {
       type: new GraphQLNonNull(GraphQLString)
-    },
-    organization: {
-      type: new GraphQLNonNull(GraphQLString)
     }
   },
   outputFields: {
     league: {
       type: LeagueType,
-      resolve: (payload) => {
-        return payload
-      }
+      resolve: ({league}) => league
+    },
+    error: {
+      type: GraphQLString,
+      resolve: ({error}) => error
     }
   },
-  mutateAndGetPayload: ({title, startdate, enddate, organization}) => {
-    let newLeague = new League({
-      title,
-      startdate,
-      enddate
-    })
-    return newLeague.saveAsync()
-    .then( league => {
-      let newLeagueToOrg = new LeagueToOrg({
-        leagueId: league.id,
-        orgId: organization
+  mutateAndGetPayload: ({title, startdate, enddate}, context) => {
+    if(context.viewer) {
+      let newLeague = new League({
+        title,
+        startdate,
+        enddate
       })
-      newLeagueToOrg.saveAsync();
-      return league
-    });
+      return newLeague.saveAsync()
+      .then( league => {
+        let newLeagueToOrg = new LeagueToOrg({
+          leagueId: league.id,
+          orgId: context.viewer.id
+        })
+        newLeagueToOrg.saveAsync();
+        return {league}
+      });
+    } else {
+      return {
+        error: 'Your account is not authorized to create new Leagues'
+      }
+    }
   }
 })

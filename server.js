@@ -3,9 +3,11 @@ import express from 'express';
 import graphQLHTTP from 'express-graphql';
 import schema from './src/schema';
 import mongoose from 'mongoose';
-import cors from 'cors'
+import cors from 'cors';
+import jwt from 'jsonwebtoken';
+require('dotenv').config();
 
-mongoose.connect('mongodb://localhost/balance-api', (err) => {
+mongoose.connect(process.env.MONGODB_URI, (err) => {
   if(err) console.error(err)
   else console.log('Mongodb connected')
 })
@@ -15,13 +17,19 @@ const PORT = process.env.PORT || 8080;
 
 app.use('/', cors(), graphQLHTTP( req => {
 
-  // TODO: Pull viewer information from auth_token
-  const viewer = {id: ""};
+  let context = {};
+
+  if (req.headers.authorization) {
+    let decoded = jwt.decode(req.headers.authorization, process.env.JWT_SECRET)
+    if(decoded) {
+      context.viewer = decoded._doc
+    } else {
+      context.viewer = null
+    }
+  }
 
   return {
-    context: {
-      viewer
-    },
+    context,
     schema: schema,
     pretty: true,
     graphiql: true

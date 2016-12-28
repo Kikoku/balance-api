@@ -1,13 +1,16 @@
 import {
   GraphQLObjectType,
   GraphQLString,
-  GraphQLInt
+  GraphQLInt,
+  GraphQLList
 } from 'graphql';
 import {
   globalIdField,
   connectionDefinitions
 } from 'graphql-relay'
 import { nodeInterface  } from '../node';
+import RoleType from './Role';
+import Role from '../../../models/types/Role';
 
 const OrganizationType = new GraphQLObjectType({
   name: 'Organization',
@@ -20,7 +23,12 @@ const OrganizationType = new GraphQLObjectType({
       type: GraphQLString
     },
     password: {
-      type: GraphQLString
+      type: GraphQLString,
+      resolve: () => null
+    },
+    roles: {
+      type: new GraphQLList(RoleType),
+      resolve: (org, args) => Role.findAsync({_id: { $in: org.roles}})
     }
   }),
   interfaces: () => [nodeInterface]
