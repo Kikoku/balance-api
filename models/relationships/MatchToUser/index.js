@@ -2,7 +2,7 @@ import mongoose, { Schema } from 'mongoose';
 import Bluebird from 'bluebird';
 
 const matchToUserSchema = new Schema ({
-  player: {
+  person: {
     type: Schema.ObjectId,
     ref: 'User'
   },
@@ -17,8 +17,10 @@ const matchToUserSchema = new Schema ({
   win: Number,
   loss: Number,
   draw: Number,
-  elo: Number,
-  change: Number,
+  p1elo: Number,
+  p1change: Number,
+  p2elo: Number,
+  p2change: Number,
   outcome: Number,
   winbydrop: Boolean
 });
