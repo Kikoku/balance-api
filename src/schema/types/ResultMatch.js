@@ -40,10 +40,16 @@ const ResultMatchType = new GraphQLObjectType({
     draw: {
       type: GraphQLInt
     },
-    elo: {
+    p1elo: {
       type: GraphQLInt
     },
-    change: {
+    p1change: {
+      type: GraphQLInt
+    },
+    p2elo: {
+      type: GraphQLInt
+    },
+    p2change: {
       type: GraphQLInt
     }
   }),
