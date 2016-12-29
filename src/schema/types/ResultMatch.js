@@ -25,7 +25,7 @@ const ResultMatchType = new GraphQLObjectType({
     },
     player: {
       type: UserType,
-      resolve: (result, args) => userLoader.load(result.player)
+      resolve: (result, args) => userLoader.load(result.person)
     },
     opponent: {
       type: UserType,
