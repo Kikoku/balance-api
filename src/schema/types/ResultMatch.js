@@ -23,7 +23,7 @@ const ResultMatchType = new GraphQLObjectType({
       type: MatchType,
       resolve: (result, args) => matchLoader.load(result.matchId)
     },
-    player: {
+    person: {
       type: UserType,
       resolve: (result, args) => userLoader.load(result.person)
     },
