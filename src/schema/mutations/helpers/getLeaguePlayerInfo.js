@@ -19,7 +19,7 @@ const getLeaguePlayerInfo = async (players, leagueId) => {
       draw: 0,
       elo: 1600,
       change: 0,
-      attendance: 1
+      attendance: 0
     })
   })
 
@@ -27,21 +27,17 @@ const getLeaguePlayerInfo = async (players, leagueId) => {
     let leagueData = leaguePlayers.find((lp) => lp.userId == player.id);
 
     let { win, loss, draw, elo, change, attendance } = leagueData
-    let { id, first, last, middle, country, dci } = player
+    let { id, dci } = player
 
     return {
       id,
-      first,
-      last,
-      middle,
-      country,
       dci,
       win,
       loss,
       draw,
       elo,
       change,
-      attendance
+      attendance: attendance + 1
     }
   })
 }
