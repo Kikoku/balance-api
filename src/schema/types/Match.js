@@ -21,7 +21,9 @@ const MatchType = new GraphQLObjectType({
     },
     results: {
       type: ResultMatchType,
-      resolve: (match) => MatchToUser.findByIdAsync({matchId: match.id})
+      resolve: (match) => {
+        return MatchToUser.findOneAsync({matchId: match._id})
+      }
     }
   }),
   interfaces: () => [nodeInterface]
