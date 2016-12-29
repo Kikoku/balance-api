@@ -3,7 +3,6 @@ import Bluebird from 'bluebird';
 
 const matchSchema = new Schema ({
   round: Number,
-  number: Number,
   PlayFormat: String,
   date: String,
   teamformat: Boolean
