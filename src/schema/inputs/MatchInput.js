@@ -23,7 +23,7 @@ const MatchInputType = new GraphQLInputObjectType({
     teamformat: {
       type: GraphQLBoolean
     },
-    player: {
+    person: {
       type: GraphQLString
     },
     opponent: {
