@@ -23,9 +23,9 @@ const ResultEventType = new GraphQLObjectType({
       type: EventType,
       resolve: (result, args) => eventLoader.load(result.eventId)
     },
-    player: {
+    person: {
       type: UserType,
-      resolve: (result, args) => userLoader.load(result.player)
+      resolve: (result, args) => userLoader.load(result.userId)
     },
     win: {
       type: GraphQLInt
