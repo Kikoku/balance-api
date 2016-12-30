@@ -194,6 +194,7 @@ export const newEvent = mutationWithClientMutationId({
           eventId: savedEvent.id,
           orgId: context.viewer._id
         })
+        newEventToOrg.saveAsync()
         return {event: savedEvent}
       })
     } else {
