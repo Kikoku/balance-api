@@ -25,12 +25,12 @@ const calcEvent = async (event) => {
       change: 0
     }
 
-    match.p1change = eloUpdate(match.outcome === '2' ? .5 : match.win > match.loss ? 1 : 0, p1.elo, p2.elo);
+    match.p1change = eloUpdate(match.outcome === 2 ? .5 : match.win > match.loss ? 1 : 0, p1.elo, p2.elo);
     match.p1elo = p1.elo + match.p1change;
     match.p1Id = p1.id;
 
     if(p2.dci !== "BUY") {
-      match.p2change = eloUpdate(match.outcome === '2' ? .5 : match.win < match.loss ? 1 : 0, p2.elo, p1.elo);
+      match.p2change = eloUpdate(match.outcome === 2 ? .5 : match.win < match.loss ? 1 : 0, p2.elo, p1.elo);
       match.p2elo = p2.elo + match.p2change;
       match.p2Id = p2.id;
     }
