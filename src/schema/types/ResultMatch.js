@@ -29,7 +29,7 @@ const ResultMatchType = new GraphQLObjectType({
     },
     opponent: {
       type: UserType,
-      resolve: (result, args) => userLoader.load(result.opponent)
+      resolve: (result, args) => result.opponent ? userLoader.load(result.opponent) : null
     },
     win: {
       type: GraphQLInt
@@ -50,6 +50,9 @@ const ResultMatchType = new GraphQLObjectType({
       type: GraphQLInt
     },
     p2change: {
+      type: GraphQLInt
+    },
+    outcome: {
       type: GraphQLInt
     }
   }),
