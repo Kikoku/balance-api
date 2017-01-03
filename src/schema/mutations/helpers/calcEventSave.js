@@ -75,17 +75,21 @@ export const savePlayers = (players, eventId, leagueId) => {
     })
     newEventToUser.saveAsync();
 
-    let newLeagueToUser = new LeagueToUser({
+    LeagueToUser.updateAsync({
       userId: player.id,
-      leagueId,
-      win: player.win,
-      loss: player.loss,
-      draw: player.draw,
-      elo: player.elo,
-      change: player.change,
-      attendance: player.attendance
-    })
-    newLeagueToUser.saveAsync();
+      leagueId},
+      {
+        $set: {
+          win: player.win,
+          loss: player.loss,
+          draw: player.draw,
+          elo: player.elo,
+          change: player.change,
+          attendance: player.attendance
+        }
+      },
+
+    )
   })
 }
 
