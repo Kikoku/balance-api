@@ -39,9 +39,23 @@ const calcEvent = async (event) => {
       if(player.dci === match.person) {
         player.elo += match.p1change;
         player.change += match.p1change;
+        if(match.outcome === 2) {
+          player.draw++
+        } else if(match.win > match.loss) {
+          player.win++
+        } else {
+          player.loss++
+        }
       } else if(player.dci === match.opponent) {
         player.elo += match.p2change;
         player.change += match.p2change;
+        if(match.outcome === 2) {
+          player.draw++
+        } else if(match.win < match.loss) {
+          player.win++
+        } else {
+          player.loss++
+        }
       }
       return player
     })
