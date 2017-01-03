@@ -75,21 +75,20 @@ export const savePlayers = (players, eventId, leagueId) => {
     })
     newEventToUser.saveAsync();
 
-    LeagueToUser.updateAsync({
+    LeagueToUser.findAsync({
       userId: player.id,
-      leagueId},
-      {
-        $set: {
-          win: player.win,
-          loss: player.loss,
-          draw: player.draw,
-          elo: player.elo,
-          change: player.change,
-          attendance: player.attendance
-        }
-      },
+      leagueId
+    }).map(user => {
+      user.win += player.win;
+      user.loss += player.loss;
+      user.draw += player.draw;
+      user.elo = player.elo;
+      user.change = player.change;
+      user.attendance++;
 
-    )
+      return user.saveAsync()
+
+    })
   })
 }
 
