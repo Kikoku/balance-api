@@ -4,7 +4,10 @@ import bcrypt from 'bcrypt';
 
 const organizationSchema = new Schema ({
   name: String,
-  email: String,
+  email: {
+    type: String,
+    unique: true
+  },
   password: String,
   roles: [{
     type: Schema.ObjectId,
