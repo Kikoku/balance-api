@@ -8,6 +8,10 @@ import jwt from 'jsonwebtoken';
 
 let app = express();
 
+if (app.get('env' === 'development')) {
+  require('dotenv').config();
+}
+
 mongoose.connect(process.env.MONGODB_URI, (err) => {
   if(err) console.error(err)
   else console.log('Mongodb connected')
