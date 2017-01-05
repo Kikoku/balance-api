@@ -23,13 +23,13 @@ const ResultMatchType = new GraphQLObjectType({
       type: MatchType,
       resolve: (result, args) => matchLoader.load(result.matchId)
     },
-    player: {
+    person: {
       type: UserType,
-      resolve: (result, args) => userLoader.load(result.player)
+      resolve: (result, args) => userLoader.load(result.person)
     },
     opponent: {
       type: UserType,
-      resolve: (result, args) => userLoader.load(result.opponent)
+      resolve: (result, args) => result.opponent ? userLoader.load(result.opponent) : null
     },
     win: {
       type: GraphQLInt
@@ -40,10 +40,19 @@ const ResultMatchType = new GraphQLObjectType({
     draw: {
       type: GraphQLInt
     },
-    elo: {
+    p1elo: {
       type: GraphQLInt
     },
-    change: {
+    p1change: {
+      type: GraphQLInt
+    },
+    p2elo: {
+      type: GraphQLInt
+    },
+    p2change: {
+      type: GraphQLInt
+    },
+    outcome: {
       type: GraphQLInt
     }
   }),

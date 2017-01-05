@@ -23,7 +23,7 @@ const ResultLeagueType = new GraphQLObjectType({
       type: LeagueType,
       resolve: (result, args) => leagueLoader.load(result.leagueId)
     },
-    userId: {
+    person: {
       type: UserType,
       resolve: (result, args) => userLoader.load(result.userId)
     },

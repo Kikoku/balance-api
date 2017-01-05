@@ -56,9 +56,9 @@ const UserType = new GraphQLObjectType({
       type: ResultMatchConnection,
       args: connectionArgs,
       resolve: (user, args) => connectionFromPromisedArray(
-        MatchToUser.findAsync({userId: user.id}),
-        args
-      )
+          MatchToUser.findAsync( {$or: [{person: user._id}, {opponent: user._id}]}),
+          args
+        )
     }
   }),
   interfaces: () => [nodeInterface]

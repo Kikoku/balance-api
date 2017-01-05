@@ -1,32 +1,45 @@
 import {
   GraphQLNonNull,
-  GraphQLString
+  GraphQLString,
+  GraphQLList
 } from 'graphql';
 import {
   mutationWithClientMutationId
 } from 'graphql-relay';
+import Promise from 'bluebird';
 import EventType from '../types/Event';
+import EventInputType from '../inputs/EventInput';
+import LogInputType from '../inputs/LogInput';
+import PlayerInputType from '../inputs/PlayerInput';
+import MatchInputType from '../inputs/MatchInput';
+import {
+  getLeaguePlayerInfo,
+  calcEvent,
+  saveLogs,
+  saveMatches,
+  savePlayers,
+  saveLeague,
+  saveOrg
+ } from './helpers';
 import Event from '../../../models/types/Event';
-import EventToOrg from '../../../models/relationships/EventToOrg';
-import LeagueToEvent from '../../../models/relationships/LeagueToEvent';
 
 export const newEvent = mutationWithClientMutationId({
   name: 'newEvent',
   inputFields: {
-    eventguid: {
-      type: GraphQLString
-    },
-    sanctionnumber: {
-      type: GraphQLString
-    },
-    title: {
-      type: GraphQLString
-    },
-    startdate: {
-      type: GraphQLString
+    event: {
+      type: new GraphQLNonNull(EventInputType)
     },
     leagueId: {
-      type: GraphQLString
+      type: new GraphQLNonNull(GraphQLString)
+    },
+    logs: {
+      type: new GraphQLNonNull(new GraphQLList(LogInputType))
+    },
+    players: {
+      type: new GraphQLNonNull(new GraphQLList(PlayerInputType))
+    },
+    matches: {
+      type: new GraphQLNonNull(new GraphQLList(MatchInputType))
     }
   },
   outputFields: {
@@ -39,29 +52,73 @@ export const newEvent = mutationWithClientMutationId({
       resolve: ({error}) => error
     }
   },
-  mutateAndGetPayload: ({title, startdate, sanctionnumber, eventguid, leagueId}, context ) => {
+  mutateAndGetPayload: async ({event, leagueId, logs, players, matches}, context ) => {
 
     if(context.viewer) {
-      let newEvent = new Event({
-        title,
-        startdate,
+      const {
+        batchid,
+        coordinator,
+        eliminationType,
+        enddate,
+        eventguid,
+        eventtypecode,
+        format,
+        iscasuallreportonly,
+        isplayoff,
+        isstarted,
+        manualmatchround,
+        notes,
+        numberofrounds,
+        playoffstartround,
+        postevententry,
         sanctionnumber,
-        eventguid
+        seats,
+        startdate,
+        status,
+        title
+      } = event;
+
+      players = await getLeaguePlayerInfo(players, leagueId);
+
+      event.players = players;
+      event.matches = matches;
+      event.logs = logs;
+      event = await calcEvent(event);
+
+      let newEvent = new Event({
+        batchid,
+        coordinator,
+        eliminationType,
+        enddate,
+        eventguid,
+        eventtypecode,
+        format,
+        iscasuallreportonly,
+        isplayoff,
+        isstarted,
+        manualmatchround,
+        notes,
+        numberofrounds,
+        playoffstartround,
+        postevententry,
+        sanctionnumber,
+        seats,
+        startdate,
+        status,
+        title
       })
-      return newEvent.saveAsync()
-      .then( event => {
-        let newEventToOrg = new EventToOrg({
-          eventId: event.id,
-          orgId: context.viewer.id
-        })
-        newEventToOrg.saveAsync();
-        let newLeagueToEvent = new LeagueToEvent({
-          eventId: event.id,
-          leagueId
-        })
-        newLeagueToEvent.saveAsync();
-        return {event};
-      });
+
+      newEvent = await newEvent.saveAsync();
+      await saveLogs(event.logs, newEvent.id);
+      await saveMatches(event.matches, newEvent.id);
+      await savePlayers(event.players, newEvent.id, leagueId);
+      await saveLeague(leagueId, newEvent.id);
+      await saveOrg(context.viewer._id, newEvent.id);
+
+      return {
+        event: newEvent
+      }
+
     } else {
       return {
         error: 'Your account is not authorized to perform this action'

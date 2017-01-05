@@ -2,7 +2,10 @@ import mongoose, { Schema } from 'mongoose';
 import Bluebird from 'bluebird';
 
 const matchSchema = new Schema ({
-  round: Number
+  round: Number,
+  PlayFormat: String,
+  date: String,
+  teamformat: Boolean
 });
 
 const Match = mongoose.model('Match', matchSchema);
