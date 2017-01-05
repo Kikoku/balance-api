@@ -36,6 +36,6 @@ app.use('/', cors(), graphQLHTTP( req => {
   }
 }));
 
-app.listen(8080, (err) => {
+app.listen(PORT, (err) => {
   console.log(`GraphQL Server is now running on ${PORT}`);
 })
