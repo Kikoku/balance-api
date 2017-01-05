@@ -8,7 +8,7 @@ import jwt from 'jsonwebtoken';
 
 let app = express();
 
-if (app.get('env' === 'development')) {
+if (app.get('env') === 'development') {
   require('dotenv').config();
 }
 
