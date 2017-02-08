@@ -12,9 +12,9 @@ if (app.get('env') === 'development') {
   require('dotenv').config();
 }
 
-mongoose.connect(process.env.MONGODB_URI, (err) => {
+mongoose.connect(app.get('env') === 'development' ? 'mongodb://localhost/balance-api' : process.env.MONGODB_URI, (err) => {
   if(err) console.error(err)
-  else console.log('Mongodb connected')
+  else console.log(`MongoDB Connected to: ${app.get('env') === 'development' ? 'mongodb://localhost/balance-api' : process.env.MONGODB_URI}`)
 })
 
 const PORT = process.env.PORT || 8080;
