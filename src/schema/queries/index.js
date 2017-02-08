@@ -16,6 +16,7 @@ import OrganizationType, { OrganizationConnection } from '../types/Organization'
 import MatchType, { MatchConnection } from '../types/Match';
 import LeagueType, { LeagueConnection } from '../types/League';
 import EventType, { EventConnection } from '../types/Event';
+import ViewerType from '../types/Viewer';
 import { nodeField } from '../node';
 
 const rootField = (GQLType, type) => {
@@ -46,6 +47,10 @@ export const queryType = new GraphQLObjectType({
   name: 'Query',
   fields: () => ({
     node: nodeField,
+    viewer: {
+      type: ViewerType,
+      resolve: (_, args, { viewer } ) => viewer
+    },
     user: rootField(UserType, 'user'),
     users: rootConnection(UserConnection, 'user'),
     organization: rootField(OrganizationType, 'organization'),
