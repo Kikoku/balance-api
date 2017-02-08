@@ -23,14 +23,18 @@ app.use('/', cors(), graphQLHTTP( req => {
 
   let context = {};
 
-  if (req.headers.authorization) {
-    let decoded = jwt.decode(req.headers.authorization, process.env.JWT_SECRET)
-    if(decoded) {
-      context.viewer = decoded._doc
-    } else {
-      context.viewer = null
+
+  let decoded = jwt.decode(req.headers.authorization, process.env.JWT_SECRET)
+  if(decoded) {
+    context.viewer = decoded._doc
+  } else {
+    context.viewer = {
+      name: 'Guest',
+      email: null,
+      roles: []
     }
   }
+
 
   return {
     context,
