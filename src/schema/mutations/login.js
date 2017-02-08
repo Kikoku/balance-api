@@ -41,16 +41,18 @@ export const login = mutationWithClientMutationId({
       Organization.findOne({email: email})
       .populate('roles')
       .exec((err, org) => {
-        if(org.password === password) {
-          resolve({
-            orgId: org.id,
-            access_token: jwt.sign(org, process.env.JWT_SECRET)
-          })
-        } else {
-          resolve({
-            error: 'Invalid credentials'
-          })
-        }
+        org.comparePassword(password, (err, isMatch) => {
+          if(!err) {
+            resolve({
+              orgId: org.id,
+              access_token: jwt.sign(org, process.env.JWT_SECRET)
+            })
+          } else {
+            resolve({
+              error: 'Invalid credentials'
+            })
+          }
+        })
       })
     })
   }
