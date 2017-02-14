@@ -10,7 +10,8 @@ import {
   globalIdField,
   connectionDefinitions,
   connectionArgs,
-  connectionFromPromisedArray
+  connectionFromPromisedArray,
+  fromGlobalId
 } from 'graphql-relay';
 import {
   getObjectsByType,
@@ -33,7 +34,10 @@ const rootField = (GQLType, type) => {
         description: `ID of a ${type}`
       }
     },
-    resolve: (_, args) => getObjectById(type, args.id)
+    resolve: (_, args) => {
+      const { id } = fromGlobalId(args.id);
+      return (getObjectById(type, id))
+    }
   }
 }
 
