@@ -60,7 +60,7 @@ const ViewerType = new GraphQLObjectType({
     },
     roles: {
       type: new GraphQLList(RoleType),
-      resolve: (viewer, args) => viewer.roles.length > 1 ? Role.findAsync({_id: { $in: viewer.roles}}) : [{name: 'guest'}]
+      resolve: (viewer, args) => viewer.roles.length > 0 ? Role.findAsync({_id: { $in: viewer.roles}}) : [{name: 'guest'}]
     },
     user: rootField(UserType, 'user'),
     users: rootConnection(UserConnection, 'user'),
