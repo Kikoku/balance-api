@@ -55,6 +55,7 @@ const rootConnection = (connection, type) => {
 const ViewerType = new GraphQLObjectType({
   name: 'Viewer',
   fields: () => ({
+    id: globalIdField('Organization'),
     name: {
       type: GraphQLString
     },
