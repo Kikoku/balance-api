@@ -25,7 +25,7 @@ export const newLeague = mutationWithClientMutationId({
   outputFields: {
     league: {
       type: LeagueType,
-      resolve: ({league}) => league
+      resolve: ({league}) => league ? league : null
     },
     error: {
       type: GraphQLString,
@@ -33,7 +33,7 @@ export const newLeague = mutationWithClientMutationId({
     }
   },
   mutateAndGetPayload: ({title, startdate, enddate}, context) => {
-    if(context.viewer) {
+    if(context.viewer && context.viewer.roles.findIndex((role) => role.name === 'organization') > -1) {
       let newLeague = new League({
         title,
         startdate,

@@ -25,7 +25,7 @@ export const newOrganization = mutationWithClientMutationId({
   outputFields: {
     organization: {
       type: OrganizationType,
-      resolve: (payload) => payload
+      resolve: (payload) => payload.name ? payload : null
     },
     error: {
       type: GraphQLString,
@@ -33,23 +33,19 @@ export const newOrganization = mutationWithClientMutationId({
     }
   },
   mutateAndGetPayload: ({name, email, password}, context) => {
-    if(context.viewer) {
-      if(context.viewer.roles.findIndex((role) => role.name === 'admin') > -1) {
-        return Role.findOneAsync({name: 'organization'})
-        .then(role => {
-          let newOrg = new Organization({
-            name,
-            email,
-            password,
-            roles: [role.id]
-          })
-          return newOrg.saveAsync();
+    if(context.viewer && context.viewer.roles.findIndex((role) => role.name === 'admin') > -1) {
+
+      return Role.findOneAsync({name: 'organization'})
+      .then(role => {
+        let newOrg = new Organization({
+          name,
+          email,
+          password,
+          roles: [role.id]
         })
-      } else {
-        return {
-          error: 'Your account is not authorized to perform this action'
-        }
-      }
+        return newOrg.saveAsync();
+      })
+
     } else {
       return {
         error: 'Your account is not authorized to perform this action'
