@@ -54,7 +54,7 @@ export const newEvent = mutationWithClientMutationId({
   },
   mutateAndGetPayload: async ({event, leagueId, logs, players, matches}, context ) => {
 
-    if(context.viewer) {
+    if(context.viewer && context.viewer.roles.findIndex((role) => role.name === 'organization') > -1) {
       const {
         batchid,
         coordinator,
