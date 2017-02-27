@@ -4,7 +4,8 @@ import {
   GraphQLList
 } from 'graphql';
 import {
-  mutationWithClientMutationId
+  mutationWithClientMutationId,
+  fromGlobalId
 } from 'graphql-relay';
 import Promise from 'bluebird';
 import EventType from '../types/Event';
@@ -77,6 +78,8 @@ export const newEvent = mutationWithClientMutationId({
         status,
         title
       } = event;
+
+      leagueId = fromGlobalId(leagueId).id;
 
       players = await getLeaguePlayerInfo(players, leagueId);
 
