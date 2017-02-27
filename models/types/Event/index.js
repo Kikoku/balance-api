@@ -6,8 +6,7 @@ const eventSchema = new Schema ({
     type: String
   },
   coordinator: {
-    type: Schema.ObjectId,
-    ref: 'User'
+    type: String
   },
   eliminationType: {
     type: String
@@ -25,7 +24,7 @@ const eventSchema = new Schema ({
   format: {
     type: String
   },
-  iscasualreportonly: {
+  iscasuallreportonly: {
     type: Boolean
   },
   isplayoff: {
