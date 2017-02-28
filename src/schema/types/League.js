@@ -55,7 +55,7 @@ const LeagueType = new GraphQLObjectType({
       type: ResultLeagueConnection,
       args: connectionArgs,
       resolve: (league, args) => connectionFromPromisedArray(
-        LeagueToUser.findAsync({leagueId: league.id}),
+        LeagueToUser.findAsync({leagueId: league.id}, null, {sort: {elo: -1}}),
         args
       )
     }

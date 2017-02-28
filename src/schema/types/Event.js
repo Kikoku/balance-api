@@ -56,7 +56,7 @@ const EventType = new GraphQLObjectType({
       type: ResultEventConnection,
       args: connectionArgs,
       resolve: (event, args) => connectionFromPromisedArray(
-        EventToUser.findAsync({eventId: event.id}),
+        EventToUser.findAsync({eventId: event.id}, null, {sort: {win: -1}}),
         args
       )
     }
