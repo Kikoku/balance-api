@@ -6,16 +6,23 @@ import {
 } from 'graphql';
 import {
   globalIdField,
-  connectionDefinitions
+  connectionDefinitions,
+  connectionArgs,
+  connectionFromPromisedArray,
 } from 'graphql-relay'
 import { nodeInterface  } from '../node';
 import RoleType from './Role';
 import Role from '../../../models/types/Role';
+import { LeagueConnection } from './League';
+import LeagueToOrg from '../../../models/relationships/LeagueToOrg';
+import {
+  leagueLoader
+} from '../schemaHelpers';
 
 const OrganizationType = new GraphQLObjectType({
   name: 'Organization',
   fields: () => ({
-    id: globalIdField(),
+    id: globalIdField('Organization'),
     name: {
       type: GraphQLString
     },
@@ -29,7 +36,15 @@ const OrganizationType = new GraphQLObjectType({
     roles: {
       type: new GraphQLList(RoleType),
       resolve: (org, args) => Role.findAsync({_id: { $in: org.roles}})
-    }
+    },
+    leagues: {
+      type: LeagueConnection,
+      args: connectionArgs,
+      resolve: (org, args) => connectionFromPromisedArray(
+        LeagueToOrg.findAsync({orgId: org.id}).map(doc => leagueLoader.load(doc.leagueId)),
+        args
+      )
+    },
   }),
   interfaces: () => [nodeInterface]
 });
