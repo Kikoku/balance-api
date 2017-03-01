@@ -15,8 +15,11 @@ import RoleType from './Role';
 import Role from '../../../models/types/Role';
 import { LeagueConnection } from './League';
 import LeagueToOrg from '../../../models/relationships/LeagueToOrg';
+import { EventConnection } from './Event';
+import EventToOrg from '../../../models/relationships/EventToOrg';
 import {
-  leagueLoader
+  leagueLoader,
+  eventLoader,
 } from '../schemaHelpers';
 
 const OrganizationType = new GraphQLObjectType({
@@ -42,6 +45,14 @@ const OrganizationType = new GraphQLObjectType({
       args: connectionArgs,
       resolve: (org, args) => connectionFromPromisedArray(
         LeagueToOrg.findAsync({orgId: org.id}).map(doc => leagueLoader.load(doc.leagueId)),
+        args
+      )
+    },
+    events: {
+      type: EventConnection,
+      args: connectionArgs,
+      resolve: (org, args) => connectionFromPromisedArray(
+        EventToOrg.findAsync({orgId: org.id}).map(doc => eventLoader.load(doc.eventId)),
         args
       )
     },
