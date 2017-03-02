@@ -82,7 +82,7 @@ export const savePlayers = (players, eventId, leagueId) => {
       user.win += player.win;
       user.loss += player.loss;
       user.draw += player.draw;
-      user.elo = player.elo;
+      user.elo += player.change;
       user.change = player.change;
       user.attendance++;
 
