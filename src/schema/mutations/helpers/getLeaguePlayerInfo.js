@@ -11,6 +11,16 @@ const getLeaguePlayerInfo = async (players, leagueId) => {
 
   let leaguePlayers = await Promise.all(players)
   .map(player => {
+    LeagueToUser.findOrCreateAsync({
+      userId: player.id,
+      leagueId: process.env.ETERNAL_RANKING,
+      win: 0,
+      loss: 0,
+      draw: 0,
+      elo: 1600,
+      change: 0,
+      attendance: 0
+    })
     return LeagueToUser.findOrCreateAsync({
       userId: player.id,
       leagueId,
