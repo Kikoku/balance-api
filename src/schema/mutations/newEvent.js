@@ -128,6 +128,7 @@ export const newEvent = mutationWithClientMutationId({
         await saveMatches(event.matches, newEvent.id);
         await savePlayers(event.players, newEvent.id, leagueId);
         await saveLeague(leagueId, newEvent.id);
+        await saveLeague(process.env.ETERNAL_RANKING, newEvent.id);
         await saveOrg(context.viewer._id, newEvent.id);
 
         return {
