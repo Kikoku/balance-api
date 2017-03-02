@@ -77,7 +77,12 @@ export const savePlayers = (players, eventId, leagueId) => {
 
     LeagueToUser.findAsync({
       userId: player.id,
-      leagueId
+      leagueId: {
+        $in: [
+          leagueId,
+          process.env.ETERNAL_RANKING
+        ]
+      }
     }).map(user => {
       user.win += player.win;
       user.loss += player.loss;
