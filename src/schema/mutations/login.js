@@ -22,17 +22,23 @@ export const login = mutationWithClientMutationId({
     }
   },
   outputFields: {
-    token: {
-      type: TokenType,
-      resolve: ({access_token}) => ({access_token})
-    },
-    organization: {
-      type: OrganizationType,
-      resolve: ({orgId}) => orgId ? organizationLoader.load(orgId) : null
-    },
     error: {
       type: GraphQLString,
       resolve: ({error}) => error
+    },
+    token: {
+      type: TokenType,
+      resolve: ({access_token}) => {
+        console.log(access_token);
+        return access_token ? ({access_token}) : null;
+      }
+    },
+    organization: {
+      type: OrganizationType,
+      resolve: ({orgId}) => {
+        console.log(orgId);
+        return orgId ? organizationLoader.load(orgId) : null;
+      }
     }
   },
   mutateAndGetPayload: ({email, password}) => {
@@ -41,18 +47,24 @@ export const login = mutationWithClientMutationId({
       Organization.findOne({email: email})
       .populate('roles')
       .exec((err, org) => {
-        org.comparePassword(password, (err, isMatch) => {
-          if(!err) {
-            resolve({
-              orgId: org.id,
-              access_token: jwt.sign(org, process.env.JWT_SECRET)
-            })
-          } else {
-            resolve({
-              error: 'Invalid credentials'
-            })
-          }
-        })
+        if(org) {
+          org.comparePassword(password, (err, isMatch) => {
+            if(isMatch) {
+              resolve({
+                orgId: org.id,
+                access_token: jwt.sign(org, process.env.JWT_SECRET)
+              })
+            } else {
+              resolve({
+                error: 'Invalid credentials'
+              })
+            }
+          })
+        } else {
+          resolve({
+            error: 'Invalid credentials'
+          })
+        }
       })
     })
   }
