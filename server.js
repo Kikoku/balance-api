@@ -41,7 +41,7 @@ app.use('/', cors(), graphQLHTTP( req => {
     context,
     schema: schema,
     pretty: true,
-    graphiql: true
+    graphiql: process.env.GRAPHIQL === 'true'
   }
 }));
 
