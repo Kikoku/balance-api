@@ -29,14 +29,12 @@ export const login = mutationWithClientMutationId({
     token: {
       type: TokenType,
       resolve: ({access_token}) => {
-        console.log(access_token);
         return access_token ? ({access_token}) : null;
       }
     },
     organization: {
       type: OrganizationType,
       resolve: ({orgId}) => {
-        console.log(orgId);
         return orgId ? organizationLoader.load(orgId) : null;
       }
     }
