@@ -32,12 +32,12 @@ const getLeaguePlayerInfo = async (players, leagueId) => {
     return {
       id,
       dci,
-      win,
-      loss,
-      draw,
+      win: 0,
+      loss: 0,
+      draw: 0,
       elo,
-      change,
-      attendance: attendance + 1
+      change: 0,
+      attendance
     }
   })
 }
