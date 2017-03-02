@@ -111,15 +111,29 @@ export const newEvent = mutationWithClientMutationId({
         title
       })
 
-      newEvent = await newEvent.saveAsync();
-      await saveLogs(event.logs, newEvent.id);
-      await saveMatches(event.matches, newEvent.id);
-      await savePlayers(event.players, newEvent.id, leagueId);
-      await saveLeague(leagueId, newEvent.id);
-      await saveOrg(context.viewer._id, newEvent.id);
+      let error = false;
 
-      return {
-        event: newEvent
+      newEvent = await newEvent.saveAsync()
+      .catch(err => {
+          error = 'This Event has already been reported'
+      });
+
+      if (error) {
+        return {
+          error: error
+        }
+      } else {
+
+        await saveLogs(event.logs, newEvent.id);
+        await saveMatches(event.matches, newEvent.id);
+        await savePlayers(event.players, newEvent.id, leagueId);
+        await saveLeague(leagueId, newEvent.id);
+        await saveOrg(context.viewer._id, newEvent.id);
+
+        return {
+          event: newEvent
+        }
+
       }
 
     } else {
