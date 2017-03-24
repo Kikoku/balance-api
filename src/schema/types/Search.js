@@ -8,7 +8,6 @@ import EventType from './Event';
 import LeagueType from './League';
 import OrganizationType from './Organization';
 import UserType from './User';
-import MatchType from './Match';
 import {
   connectionDefinitions,
 } from 'graphql-relay';
@@ -37,9 +36,6 @@ const SearchType = new GraphQLInterfaceType({
     }
     if(data.title && !data.sanctionnumber) {
       return LeagueType
-    }
-    if(data.rounds) {
-      return MatchType
     }
   }
 })
