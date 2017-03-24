@@ -15,7 +15,8 @@ import {
 } from 'graphql-relay';
 import {
   getObjectsByType,
-  getObjectById
+  getObjectById,
+  SearchResult
 } from '../schemaHelpers.js';
 import UserType, { UserConnection } from './User';
 import OrganizationType, { OrganizationConnection } from './Organization';
@@ -23,6 +24,7 @@ import MatchType, { MatchConnection } from './Match';
 import LeagueType, { LeagueConnection } from './League';
 import EventType, { EventConnection } from './Event';
 import RoleType from './Role';
+import SearchType, { SearchConnection } from './Search';
 import Role from '../../../models/types/Role';
 
 const rootField = (GQLType, type) => {
@@ -72,7 +74,22 @@ const ViewerType = new GraphQLObjectType({
     league:rootField(LeagueType, 'league'),
     leagues: rootConnection(LeagueConnection, 'league'),
     event: rootField(EventType, 'event'),
-    events: rootConnection(EventConnection, 'event')
+    events: rootConnection(EventConnection, 'event'),
+    search: {
+      type: SearchConnection,
+      args: {
+        ...connectionArgs,
+        query: {
+          type: new GraphQLNonNull(GraphQLString)
+        }
+      },
+      resolve: (_, args) => args.query.length > 2 ? connectionFromPromisedArray(
+        SearchResult({ query: args.query }),
+        args
+      ) : {
+        edges: []
+      }
+    }
   })
 });
 
