@@ -6,6 +6,7 @@ import UserType from './types/User';
 import OrganizationType from './types/Organization';
 import MatchType from './types/Match';
 import EventType from './types/Event';
+import LeaugeType from './types/League';
 import { getObjectById } from './schemaHelpers';
 
 export const { nodeInterface, nodeField } = nodeDefinitions(
