@@ -11,6 +11,7 @@ import {
   connectionFromPromisedArray,
 } from 'graphql-relay'
 import { nodeInterface  } from '../node';
+import SearchType from './Search';
 import RoleType from './Role';
 import Role from '../../../models/types/Role';
 import { LeagueConnection } from './League';
@@ -26,6 +27,10 @@ const OrganizationType = new GraphQLObjectType({
   name: 'Organization',
   fields: () => ({
     id: globalIdField('Organization'),
+    createdDate: {
+      type: GraphQLString,
+      resolve: (org) => org._id.getTimestamp()
+    },
     name: {
       type: GraphQLString
     },
@@ -57,7 +62,7 @@ const OrganizationType = new GraphQLObjectType({
       )
     },
   }),
-  interfaces: () => [nodeInterface]
+  interfaces: () => [nodeInterface, SearchType]
 });
 
 export const { connectionType: OrganizationConnection } = connectionDefinitions({

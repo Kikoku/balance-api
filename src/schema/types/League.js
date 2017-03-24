@@ -21,11 +21,16 @@ import {
   userLoader
 } from '../schemaHelpers';
 import { nodeInterface  } from '../node';
+import SearchType from './Search'
 
 const LeagueType = new GraphQLObjectType({
   name: 'League',
   fields: () => ({
     id: globalIdField(),
+    createdDate: {
+      type: GraphQLString,
+      resolve: (league) => league._id.getTimestamp()
+    },
     title: {
       type: GraphQLString
     },
@@ -60,7 +65,7 @@ const LeagueType = new GraphQLObjectType({
       )
     }
   }),
-  interfaces: () => [nodeInterface]
+  interfaces: () => [nodeInterface, SearchType]
 });
 
 export const { connectionType: LeagueConnection } = connectionDefinitions({

@@ -21,11 +21,16 @@ import {
   userLoader
 } from '../schemaHelpers';
 import { nodeInterface  } from '../node';
+import SearchType from './Search';
 
 const EventType = new GraphQLObjectType({
   name: 'Event',
   fields: () => ({
     id: globalIdField(),
+    createdDate: {
+      type: GraphQLString,
+      resolve: (event) => event._id.getTimestamp()
+    },
     eventguid: {
       type: GraphQLString
     },
@@ -61,7 +66,7 @@ const EventType = new GraphQLObjectType({
       )
     }
   }),
-  interfaces: () => [nodeInterface]
+  interfaces: () => [nodeInterface, SearchType]
 });
 
 export const { connectionType: EventConnection } = connectionDefinitions({

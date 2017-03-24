@@ -16,11 +16,16 @@ import LeagueToUser from '../../../models/relationships/LeagueToUser';
 import EventToUser from '../../../models/relationships/EventToUser';
 import MatchToUser from '../../../models/relationships/MatchToUser';
 import { nodeInterface  } from '../node';
+import SearchType from './Search';
 
 const UserType = new GraphQLObjectType({
   name: 'User',
   fields: () => ({
     id: globalIdField(),
+    createdDate: {
+      type: GraphQLString,
+      resolve: (user) => user._id.getTimestamp()
+    },
     first: {
       type: GraphQLString
     },
@@ -61,7 +66,7 @@ const UserType = new GraphQLObjectType({
         )
     }
   }),
-  interfaces: () => [nodeInterface]
+  interfaces: () => [nodeInterface, SearchType]
 });
 
 export const { connectionType: UserConnection } = connectionDefinitions({
