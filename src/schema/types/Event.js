@@ -21,7 +21,6 @@ import {
   userLoader
 } from '../schemaHelpers';
 import { nodeInterface  } from '../node';
-import SearchType from './Search';
 
 const EventType = new GraphQLObjectType({
   name: 'Event',
@@ -66,7 +65,7 @@ const EventType = new GraphQLObjectType({
       )
     }
   }),
-  interfaces: () => [nodeInterface, SearchType]
+  interfaces: () => [nodeInterface]
 });
 
 export const { connectionType: EventConnection } = connectionDefinitions({

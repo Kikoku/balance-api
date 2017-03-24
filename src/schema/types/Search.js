@@ -1,5 +1,5 @@
 import {
-  GraphQLInterfaceType,
+  GraphQLUnionType,
   GraphQLID,
   GraphQLString,
   GraphQLInt
@@ -13,16 +13,14 @@ import {
 } from 'graphql-relay';
 
 
-const SearchType = new GraphQLInterfaceType({
+const SearchType = new GraphQLUnionType({
   name: 'Search',
-  fields: {
-    id: {
-      type: GraphQLID
-    },
-    createdDate: {
-      type: GraphQLString
-    }
-  },
+  types: [
+      EventType,
+      LeagueType,
+      OrganizationType,
+      UserType
+  ],
   description: 'Search for things',
   resolveType: (data) => {
     if(data.dci) {

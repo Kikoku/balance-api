@@ -16,7 +16,6 @@ import LeagueToUser from '../../../models/relationships/LeagueToUser';
 import EventToUser from '../../../models/relationships/EventToUser';
 import MatchToUser from '../../../models/relationships/MatchToUser';
 import { nodeInterface  } from '../node';
-import SearchType from './Search';
 
 const UserType = new GraphQLObjectType({
   name: 'User',
@@ -66,7 +65,7 @@ const UserType = new GraphQLObjectType({
         )
     }
   }),
-  interfaces: () => [nodeInterface, SearchType]
+  interfaces: () => [nodeInterface]
 });
 
 export const { connectionType: UserConnection } = connectionDefinitions({

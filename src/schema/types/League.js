@@ -21,7 +21,6 @@ import {
   userLoader
 } from '../schemaHelpers';
 import { nodeInterface  } from '../node';
-import SearchType from './Search'
 
 const LeagueType = new GraphQLObjectType({
   name: 'League',
@@ -65,7 +64,7 @@ const LeagueType = new GraphQLObjectType({
       )
     }
   }),
-  interfaces: () => [nodeInterface, SearchType]
+  interfaces: () => [nodeInterface]
 });
 
 export const { connectionType: LeagueConnection } = connectionDefinitions({
