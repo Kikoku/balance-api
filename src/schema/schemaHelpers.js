@@ -4,6 +4,7 @@ import Organization from '../../models/types/Organization';
 import League from '../../models/types/League';
 import Event from '../../models/types/Event';
 import Match from '../../models/types/Match';
+import { join } from 'bluebird';
 
 const getUserById = (id) => {
   return User.findByIdAsync(id)
@@ -59,6 +60,47 @@ export const matchLoader = new DataLoader(
     cacheKeyFn: key => key.toString()
   }
 )
+
+export const SearchResult = ({ query }) => {
+
+  if (query.length < 3) return null;
+
+  // NOTE: query with 0-2 characters between each letter
+  query = new RegExp(`${query.split("").join('+.{0,2}')}.*`, "i");
+
+  return join(
+    League.findAsync({
+      $or: [
+        { title: query },
+      ]
+    }),
+    User.findAsync({
+      $or: [
+        { first: query },
+        { middle: query },
+        { last: query },
+        { dci: query },
+        { country: query },
+      ]
+    }),
+    Event.findAsync({
+      $or: [
+        { coordinator: query },
+        { eventguid: query },
+        { sanctionnumber: query },
+        { title: query },
+      ]
+    }),
+    Organization.findAsync({
+      $or: [
+        { name: query },
+        { email: query },
+      ]
+    })
+  ).then(res => res.reduce((a, b) => {
+    return a.concat(b);
+  })).call('sort', (a, b) => a._id.getTimestamp() < b._id.getTimestamp() ? 1 : a._id.getTimestamp() > b._id.getTimestamp() ? -1 : 0 )
+}
 
 export const getObjectsByType = (type) => {
 
