@@ -4,7 +4,11 @@ import Bluebird from 'bluebird';
 const leagueSchema = new Schema ({
   title: String,
   startdate: String,
-  enddate: String
+  enddate: String,
+  completed: {
+    type: Boolean,
+    default: false
+  }
 });
 
 const League = mongoose.model('League', leagueSchema);
