@@ -2,7 +2,8 @@ import {
   GraphQLObjectType,
   GraphQLString,
   GraphQLInt,
-  GraphQLList
+  GraphQLList,
+  GraphQLBoolean
 } from 'graphql';
 import {
   globalIdField,
@@ -46,9 +47,27 @@ const OrganizationType = new GraphQLObjectType({
     },
     leagues: {
       type: LeagueConnection,
-      args: connectionArgs,
+      args: {
+        ...connectionArgs,
+        showCompleted: {
+          type: GraphQLBoolean,
+          defaultValue: true
+        }
+      },
       resolve: (org, args) => connectionFromPromisedArray(
-        LeagueToOrg.findAsync({orgId: org.id}).map(doc => leagueLoader.load(doc.leagueId)),
+        LeagueToOrg.findAsync({
+          orgId: org.id
+        }).map(doc =>
+          leagueLoader.load(doc.leagueId)
+        ).filter(league => {
+          if(!args.showCompleted) {
+            if(league.completed === false) {
+              return league;
+            }
+          } else {
+            return league;
+          }
+        }),
         args
       )
     },
