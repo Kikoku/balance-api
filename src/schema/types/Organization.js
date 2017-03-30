@@ -41,6 +41,21 @@ const OrganizationType = new GraphQLObjectType({
       type: GraphQLString,
       resolve: () => null
     },
+    street: {
+      type: GraphQLString
+    },
+    city: {
+      type: GraphQLString
+    },
+    state: {
+      type: GraphQLString
+    },
+    zip: {
+      type: GraphQLString
+    },
+    phone: {
+      type: GraphQLString
+    },
     roles: {
       type: new GraphQLList(RoleType),
       resolve: (org, args) => Role.findAsync({_id: { $in: org.roles}})
