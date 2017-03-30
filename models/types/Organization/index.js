@@ -9,6 +9,11 @@ const organizationSchema = new Schema ({
     unique: true
   },
   password: String,
+  street: String,
+  city: String,
+  state: String,
+  zip: String,
+  phone: String,
   roles: [{
     type: Schema.ObjectId,
     ref: 'Role'
