@@ -47,7 +47,7 @@ export const updateOrganization = mutationWithClientMutationId({
   },
   mutateAndGetPayload: (args, context) => {
     if(context.viewer.id) {
-      return Organization.findById(fromGlobalId('T3JnYW5pemF0aW9uOjU4NWFhMTNkMjU1NjMwMTc0ODk1Yjk4Zg==').id)
+      return Organization.findById(fromGlobalId(context.viewer.id).id)
       .then(org => {
         update(org, {
           $merge: args
