@@ -1,7 +1,8 @@
 import {
   GraphQLObjectType,
   GraphQLString,
-  GraphQLInt
+  GraphQLInt,
+  GraphQLBoolean
 } from 'graphql';
 import {
   globalIdField,
@@ -38,6 +39,9 @@ const LeagueType = new GraphQLObjectType({
     },
     enddate: {
       type: GraphQLString
+    },
+    completed: {
+      type: GraphQLBoolean
     },
     events: {
       type: EventConnection,
