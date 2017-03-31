@@ -8,7 +8,8 @@ const leagueSchema = new Schema ({
   completed: {
     type: Boolean,
     default: false
-  }
+  },
+  description: String
 });
 
 const League = mongoose.model('League', leagueSchema);
