@@ -34,6 +34,9 @@ const LeagueType = new GraphQLObjectType({
     title: {
       type: GraphQLString
     },
+    description: {
+      type: GraphQLString
+    },
     startdate: {
       type: GraphQLString
     },
