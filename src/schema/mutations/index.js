@@ -9,6 +9,7 @@ import {
 import { newOrganization } from './newOrganization';
 import { updateOrganization } from './updateOrganization';
 import { newLeague } from './newLeague';
+import { updateLeague } from './updateLeague';
 import { newEvent } from './newEvent';
 import { login } from './login';
 import { logout } from './logout';
@@ -19,6 +20,7 @@ export const mutationType = new GraphQLObjectType({
     newOrganization,
     updateOrganization,
     newLeague,
+    updateLeague,
     newEvent,
     login,
     logout
